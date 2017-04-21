@@ -11,8 +11,8 @@ var cfgFile string
 
 var RootCmd = &cobra.Command{
 	Use:   "srebq",
-	Short: "search qiita",
-	Long:  "search qiita",
+	Short: "Search reference on Qiita",
+	Long:  "If you do not know or want to research, Search on Qiita.",
 }
 
 func Execute() {
@@ -29,8 +29,8 @@ func init() {
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "version",
-	Long:  "version",
+	Short: "Show Srebq version",
+	Long:  "Show Srebq version",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("srebq v1.0")
 	},
