@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os/exec"
 	"strconv"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -22,7 +23,7 @@ var searchCmd = &cobra.Command{
 	Short: "Call Api of Qiita",
 	Long:  "Call Api of Qiita",
 	Run: func(cmd *cobra.Command, args []string) {
-		resp, err := http.Get("http://qiita.com/api/v2/items?page=1&per_page=10&query=ruby")
+		resp, err := http.Get("http://qiita.com/api/v2/items?page=1&per_page=10&query=" + strings.Join(args, ","))
 		if err == nil {
 			puts(resp)
 		} else {
@@ -42,7 +43,7 @@ func puts(resp *http.Response) {
 		var content interface{}
 		json.Unmarshal(b, &content)
 		for i := 0; i < 10; i++ {
-			fmt.Println(color.YellowString(strconv.Itoa(i) + " -> "))
+			fmt.Print(color.YellowString(strconv.Itoa(i) + " -> "))
 			fmt.Println(content.([]interface{})[i].(map[string]interface{})["title"].(string))
 		}
 		var num int
