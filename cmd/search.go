@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os/exec"
 	"strconv"
 
 	"github.com/fatih/color"
@@ -43,6 +44,15 @@ func puts(resp *http.Response) {
 		for i := 0; i < 10; i++ {
 			fmt.Println(color.YellowString(strconv.Itoa(i) + " -> "))
 			fmt.Println(content.([]interface{})[i].(map[string]interface{})["title"].(string))
+		}
+		var num int
+		fmt.Print("SELECT > ")
+		_, errr := fmt.Scanf("%d", &num)
+		if errr == nil {
+			errrr := exec.Command("open", content.([]interface{})[num].(map[string]interface{})["url"].(string)).Run()
+			if errrr != nil {
+				fmt.Println(errrr)
+			}
 		}
 	} else {
 		fmt.Println(err)
