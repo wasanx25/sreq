@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -39,8 +41,8 @@ func puts(resp *http.Response) {
 		var content interface{}
 		json.Unmarshal(b, &content)
 		for i := 0; i < 10; i++ {
-			fmt.Println(i)
-			fmt.Println(content.([]interface{})[i].(map[string]interface{})["url"].(string))
+			fmt.Println(color.YellowString(strconv.Itoa(i) + " -> "))
+			fmt.Println(content.([]interface{})[i].(map[string]interface{})["title"].(string))
 		}
 	} else {
 		fmt.Println(err)
