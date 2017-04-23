@@ -36,9 +36,12 @@ func puts(resp *http.Response) {
 	defer resp.Body.Close()
 	b, err := ioutil.ReadAll(resp.Body)
 	if err == nil {
-		var content []Qiita
+		var content interface{}
 		json.Unmarshal(b, &content)
-		fmt.Printf("%+v", content)
+		for i := 0; i < 10; i++ {
+			fmt.Println(i)
+			fmt.Println(content.([]interface{})[i].(map[string]interface{})["url"].(string))
+		}
 	} else {
 		fmt.Println(err)
 	}
