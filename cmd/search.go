@@ -51,11 +51,13 @@ func puts(resp *http.Response) {
 			fmt.Print(color.YellowString(strconv.Itoa(i) + " -> "))
 			fmt.Println(content.([]interface{})[i].(map[string]interface{})["title"].(string))
 		}
-		var num int
+		var num string
+		fmt.Println(color.YellowString("n -> ") + "next page")
 		fmt.Print("SELECT > ")
-		_, errr := fmt.Scanf("%d", &num)
+		_, errr := fmt.Scanf("%s", &num)
+		number, _ := strconv.Atoi(num)
 		if errr == nil {
-			errrr := exec.Command("open", content.([]interface{})[num].(map[string]interface{})["url"].(string)).Run()
+			errrr := exec.Command("open", content.([]interface{})[number].(map[string]interface{})["url"].(string)).Run()
 			if errrr != nil {
 				fmt.Println(errrr)
 			}
