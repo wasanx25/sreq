@@ -28,12 +28,7 @@ var searchCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		pagenation = 1
 		argument = strings.Join(args, ",")
-		resp, err := http.Get("http://qiita.com/api/v2/items?page=" + strconv.Itoa(pagenation) + "&per_page=10&query=" + argument)
-		if err == nil {
-			puts(resp)
-		} else {
-			fmt.Println(err)
-		}
+		execute()
 	},
 }
 
@@ -41,26 +36,39 @@ func init() {
 	RootCmd.AddCommand(searchCmd)
 }
 
-func puts(resp *http.Response) {
-	defer resp.Body.Close()
-	b, err := ioutil.ReadAll(resp.Body)
+func execute() {
+	resp, err := http.Get("http://qiita.com/api/v2/items?page=" + strconv.Itoa(pagenation) + "&per_page=10&query=" + argument)
 	if err == nil {
-		var content interface{}
-		json.Unmarshal(b, &content)
-		for i := 0; i < 10; i++ {
-			fmt.Print(color.YellowString(strconv.Itoa(i) + " -> "))
-			fmt.Println(content.([]interface{})[i].(map[string]interface{})["title"].(string))
-		}
-		var num string
-		fmt.Println(color.YellowString("n -> ") + "next page")
-		fmt.Print("SELECT > ")
-		_, errr := fmt.Scanf("%s", &num)
-		number, _ := strconv.Atoi(num)
+		defer resp.Body.Close()
+		b, errr := ioutil.ReadAll(resp.Body)
 		if errr == nil {
-			errrr := exec.Command("open", content.([]interface{})[number].(map[string]interface{})["url"].(string)).Run()
-			if errrr != nil {
-				fmt.Println(errrr)
-			}
+			rendering(b)
+		}
+	}
+}
+
+func rendering(b []byte) {
+	var content interface{}
+	json.Unmarshal(b, &content)
+	for i := 0; i < 10; i++ {
+		fmt.Print(color.YellowString(strconv.Itoa(i) + " -> "))
+		fmt.Println(content.([]interface{})[i].(map[string]interface{})["title"].(string))
+	}
+	fmt.Println(color.YellowString("n -> ") + "next page")
+	fmt.Print("SELECT > ")
+	scan(content)
+}
+
+func scan(content interface{}) {
+	var num string
+	_, err := fmt.Scanf("%s", &num)
+	if err == nil {
+		if num == "n" {
+			pagenation++
+			execute()
+		} else {
+			numb, _ := strconv.Atoi(num)
+			exec.Command("open", content.([]interface{})[numb].(map[string]interface{})["url"].(string)).Run()
 		}
 	} else {
 		fmt.Println(err)
