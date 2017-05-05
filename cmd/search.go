@@ -29,11 +29,6 @@ var searchCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		pagenation = 1
 		argument = strings.Join(args, ",")
-		var snippets snippet.Snippets
-		err := snippets.Load()
-		if err != nil {
-			fmt.Errorf("Failed. %v", err)
-		}
 		execute()
 	},
 }
@@ -74,6 +69,7 @@ func scan(content interface{}) {
 			execute()
 		} else {
 			var snippets snippet.Snippets
+			snippets.Load()
 			numb, _ := strconv.Atoi(num)
 			url := content.([]interface{})[numb].(map[string]interface{})["url"].(string)
 			newSnippet := snippet.SnippetInfo{
