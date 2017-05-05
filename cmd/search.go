@@ -11,6 +11,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+	"github.com/wataru0225/sreq/snippet"
 )
 
 var pagenation int
@@ -28,6 +29,11 @@ var searchCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		pagenation = 1
 		argument = strings.Join(args, ",")
+		var snippets snippet.Snippets
+		err := snippets.Load()
+		if err != nil {
+			fmt.Errorf("Failed. %v", err)
+		}
 		execute()
 	},
 }
@@ -67,8 +73,19 @@ func scan(content interface{}) {
 			pagenation++
 			execute()
 		} else {
+			var snippets snippet.Snippets
 			numb, _ := strconv.Atoi(num)
-			exec.Command("open", content.([]interface{})[numb].(map[string]interface{})["url"].(string)).Run()
+			url := content.([]interface{})[numb].(map[string]interface{})["url"].(string)
+			newSnippet := snippet.SnippetInfo{
+				SearchKeyword: argument,
+				Url:           url,
+			}
+			snippets.Snippets = append(snippets.Snippets, newSnippet)
+			errr := snippets.Save()
+			if errr != nil {
+				fmt.Errorf("Failed. %v", errr)
+			}
+			exec.Command("open", url).Run()
 		}
 	} else {
 		fmt.Println(err)
