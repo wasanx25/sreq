@@ -48,15 +48,17 @@ func execute() {
 }
 
 func rendering(b []byte) {
-	var content []Qiita
-	json.Unmarshal(b, &content)
-	for i := 0; i < 10; i++ {
+	var contents []Qiita
+	json.Unmarshal(b, &contents)
+	for i, c := range contents {
 		fmt.Print(color.YellowString(strconv.Itoa(i) + " -> "))
-		fmt.Println(content[i].Url)
+		fmt.Println(c.Title)
 	}
-	fmt.Println(color.YellowString("n -> ") + "next page")
+	if len(contents) == 10 {
+		fmt.Println(color.YellowString("n -> ") + "next page")
+	}
 	fmt.Print("SELECT > ")
-	scan(content)
+	scan(contents)
 }
 
 func scan(content []Qiita) {
