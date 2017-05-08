@@ -22,13 +22,12 @@ type SnippetInfo struct {
 
 func (snippets *Snippets) Load() error {
 	dir := filepath.Join(os.Getenv("HOME"), ".config", "sreq")
-	err := os.MkdirAll(dir, 0700)
-	if err != nil {
+	if err := os.MkdirAll(dir, 0700); err != nil {
 		fmt.Errorf("cannot create directory: %v", err)
 	}
 	snippetFile := configFile
-	if _, errr := toml.DecodeFile(snippetFile, snippets); errr != nil {
-		return fmt.Errorf("Failed to load snippet file. %v", errr)
+	if _, err := toml.DecodeFile(snippetFile, snippets); err != nil {
+		return fmt.Errorf("Failed to load snippet file. %v", err)
 	}
 	return nil
 }
