@@ -17,6 +17,7 @@ type Snippets struct {
 type SnippetInfo struct {
 	SearchKeyword string `toml:"search_keyword"`
 	Url           string `toml:"url"`
+	Title         string `toml:"title"`
 }
 
 func (snippets *Snippets) Load() error {

@@ -72,9 +72,11 @@ func scan(content interface{}) {
 			snippets.Load()
 			numb, _ := strconv.Atoi(num)
 			url := content.([]interface{})[numb].(map[string]interface{})["url"].(string)
+			title := content.([]interface{})[numb].(map[string]interface{})["title"].(string)
 			newSnippet := snippet.SnippetInfo{
 				SearchKeyword: argument,
 				Url:           url,
+				Title:         title,
 			}
 			snippets.Snippets = append(snippets.Snippets, newSnippet)
 			errr := snippets.Save()
