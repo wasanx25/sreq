@@ -11,6 +11,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+	"github.com/wataru0225/sreq/config"
 	"github.com/wataru0225/sreq/snippet"
 )
 
@@ -70,7 +71,8 @@ func scan(content []Qiita) {
 			execute()
 		} else {
 			var snippets snippet.Snippets
-			snippets.Load()
+			file := config.HistoryFile()
+			snippets.Load(file)
 			numb, _ := strconv.Atoi(num)
 			url := content[numb].Url
 			newSnippet := snippet.SnippetInfo{
@@ -79,7 +81,7 @@ func scan(content []Qiita) {
 				Title:         content[numb].Title,
 			}
 			snippets.Snippets = append(snippets.Snippets, newSnippet)
-			if err := snippets.Save(); err != nil {
+			if err := snippets.Save(file); err != nil {
 				fmt.Errorf("Failed. %v", err)
 			}
 			exec.Command("open", url).Run()
