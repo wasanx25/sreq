@@ -70,23 +70,42 @@ func scan(content []Qiita) {
 			pagenation++
 			execute()
 		} else {
-			var snippets snippet.Snippets
-			file := config.HistoryFile()
-			snippets.Load(file)
 			numb, _ := strconv.Atoi(num)
-			url := content[numb].Url
-			newSnippet := snippet.SnippetInfo{
-				SearchKeyword: argument,
-				Url:           url,
-				Title:         content[numb].Title,
-			}
-			snippets.Snippets = append(snippets.Snippets, newSnippet)
-			if err := snippets.Save(file); err != nil {
-				fmt.Errorf("Failed. %v", err)
-			}
+			writeKeyword()
+			url := writeHistory(content[numb])
 			exec.Command("open", url).Run()
 		}
 	} else {
 		fmt.Println(err)
+	}
+}
+
+func writeHistory(content Qiita) string {
+	var snippets snippet.Snippets
+	file := config.HistoryFile()
+	snippets.Load(file)
+	url := content.Url
+	newSnippet := snippet.SnippetInfo{
+		SearchKeyword: argument,
+		Url:           url,
+		Title:         content.Title,
+	}
+	snippets.Snippets = append(snippets.Snippets, newSnippet)
+	if err := snippets.Save(file); err != nil {
+		fmt.Errorf("Failed. %v", err)
+	}
+	return url
+}
+
+func writeKeyword() {
+	var snippets snippet.Snippets
+	file := config.KeywordFile()
+	snippets.Load(file)
+	newSnippet := snippet.SnippetInfo{
+		SearchKeyword: argument,
+	}
+	snippets.Snippets = append(snippets.Snippets, newSnippet)
+	if err := snippets.Save(file); err != nil {
+		fmt.Errorf("Failed. %v", err)
 	}
 }

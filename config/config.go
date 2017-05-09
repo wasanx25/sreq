@@ -8,3 +8,7 @@ import (
 func HistoryFile() string {
 	return filepath.Join(os.Getenv("HOME"), ".config", "sreq", "sreq-history.toml")
 }
+
+func KeywordFile() string {
+	return filepath.Join(os.Getenv("HOME"), ".config", "sreq", "sreq-keywords.toml")
+}
