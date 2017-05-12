@@ -21,6 +21,7 @@ var argument string
 type Qiita struct {
 	Title string `json: "title"`
 	Url   string `json: "url"`
+	Body  string `json: "body"`
 }
 
 var searchCmd = &cobra.Command{
@@ -54,6 +55,12 @@ func rendering(b []byte) {
 	for i, c := range contents {
 		fmt.Print(color.YellowString(strconv.Itoa(i) + " -> "))
 		fmt.Println(c.Title)
+		if count := len(c.Body); count > 256 {
+			fmt.Println(color.GreenString(strings.Replace(c.Body, "\n", "", -1)[0:256]))
+		} else {
+			fmt.Println(color.GreenString(strings.Replace(c.Body, "\n", "", -1)))
+		}
+		fmt.Print("\n")
 	}
 	if len(contents) == 10 {
 		fmt.Println(color.YellowString("n -> ") + "next page")
