@@ -9,23 +9,20 @@ import (
 	"github.com/wataru0225/sreq/snippet"
 )
 
-var historyCmd = &cobra.Command{
-	Use:   "history",
-	Short: "Search history",
-	Long:  "Search history",
+var keywordsCmd = &cobra.Command{
+	Use:   "keywords",
+	Short: "Show Keywords History",
+	Long:  "Show Keywords History",
 	Run: func(cmd *cobra.Command, args []string) {
 		var snippets snippet.Snippets
-		file := config.HistoryFile()
+		file := config.KeywordFile()
 		snippets.Load(file)
 		for _, snip := range snippets.Snippets {
-			fmt.Println(color.YellowString("url:     " + snip.Url))
-			fmt.Println(color.GreenString("title: 	 " + snip.Title))
 			fmt.Println(color.CyanString("keyword: " + snip.SearchKeyword))
-			fmt.Println(color.WhiteString("-------------------------------"))
 		}
 	},
 }
 
 func init() {
-	RootCmd.AddCommand(historyCmd)
+	RootCmd.AddCommand(keywordsCmd)
 }
