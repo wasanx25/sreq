@@ -49,13 +49,12 @@ func initConfig() {
 		}
 
 		var cfg config.Config
-		cfg.Load()
-		newCfg := config.GeneralConfig{
-			OutputType: "editor",
-			Editor:     "vim",
+		cfg.General.OutputType = "editor"
+		cfg.General.Editor = os.Getenv("EDITOR")
+		if cfg.General.Editor == "" {
+			cfg.General.Editor = "vim"
 		}
 
-		cfg.General = newCfg
 		if err := cfg.Save(); err != nil {
 			fmt.Errorf("Failed. %v", err)
 		}
