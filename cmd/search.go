@@ -10,7 +10,6 @@ import (
 	"strconv"
 	"strings"
 
-	// "github.com/Songmu/prompter"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/wataru0225/sreq/config"
