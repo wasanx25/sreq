@@ -3,11 +3,15 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
+	"github.com/wataru0225/sreq/config"
 )
 
-var cfgFile string
+const (
+	version = "0.1.0"
+)
 
 var RootCmd = &cobra.Command{
 	Use:   "sreq",
@@ -23,7 +27,7 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize()
+	cobra.OnInitialize(initConfig)
 	RootCmd.AddCommand(versionCmd)
 }
 
@@ -32,6 +36,28 @@ var versionCmd = &cobra.Command{
 	Short: "Show Sreq version",
 	Long:  "Show Sreq version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("sreq v1.0")
+		fmt.Printf("sreq version %s\n", version)
 	},
+}
+
+func initConfig() {
+	cfgFile := config.ConfigFile()
+	if _, err := os.Stat(cfgFile); err != nil {
+		dir := filepath.Join(os.Getenv("HOME"), ".config", "sreq")
+		if err := os.MkdirAll(dir, 0700); err != nil {
+			fmt.Errorf("cannot create directory: %v", err)
+		}
+
+		var cfg config.Config
+		cfg.Load()
+		newCfg := config.GeneralConfig{
+			OutputType: "editor",
+			Editor:     "vim",
+		}
+
+		cfg.General = newCfg
+		if err := cfg.Save(); err != nil {
+			fmt.Errorf("Failed. %v", err)
+		}
+	}
 }

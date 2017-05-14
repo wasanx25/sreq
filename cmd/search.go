@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
 
+	// "github.com/Songmu/prompter"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/wataru0225/sreq/config"
@@ -79,8 +81,13 @@ func scan(content []Qiita) {
 		} else {
 			numb, _ := strconv.Atoi(num)
 			writeKeyword()
-			url := writeHistory(content[numb])
-			exec.Command("open", url).Run()
+			writeHistory(content[numb])
+			// exec.Command("open", url).Run()
+			cmd := exec.Command("less", "cmd/search.go")
+			cmd.Stdin = os.Stdin
+			cmd.Stdout = os.Stdout
+			err := cmd.Run()
+			fmt.Println(err)
 		}
 	} else {
 		fmt.Println(err)
