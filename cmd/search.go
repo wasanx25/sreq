@@ -80,12 +80,21 @@ func scan(content []Qiita) {
 		} else {
 			numb, _ := strconv.Atoi(num)
 			writeKeyword()
-			writeHistory(content[numb])
-			// exec.Command("open", url).Run()
-			cmd := exec.Command("less", "cmd/search.go")
-			cmd.Stdin = os.Stdin
-			cmd.Stdout = os.Stdout
-			err := cmd.Run()
+			url, body := writeHistory(content[numb])
+
+			var cfg config.Config
+			cfg.Load()
+			if cfg.General.OutputType == "editor" {
+				text := []byte(body)
+				ioutil.WriteFile("/tmp/sreq.txt", text, os.ModePerm)
+				editor := cfg.General.Editor
+				cmd := exec.Command(editor, "/tmp/sreq.txt")
+				cmd.Stdin = os.Stdin
+				cmd.Stdout = os.Stdout
+				cmd.Run()
+			} else if cfg.General.OutputType == "browse" {
+				exec.Command("open", url).Run()
+			}
 			fmt.Println(err)
 		}
 	} else {
@@ -93,7 +102,7 @@ func scan(content []Qiita) {
 	}
 }
 
-func writeHistory(content Qiita) string {
+func writeHistory(content Qiita) (string, string) {
 	var snippets snippet.Snippets
 	file := config.HistoryFile()
 	snippets.Load(file)
@@ -107,7 +116,7 @@ func writeHistory(content Qiita) string {
 	if err := snippets.Save(file); err != nil {
 		fmt.Errorf("Failed. %v", err)
 	}
-	return url
+	return url, content.Body
 }
 
 func writeKeyword() {
