@@ -79,7 +79,6 @@ func scan(content []Qiita) {
 			execute()
 		} else {
 			numb, _ := strconv.Atoi(num)
-			writeKeyword()
 			url, body := writeHistory(content[numb])
 
 			var cfg config.Config
@@ -117,17 +116,4 @@ func writeHistory(content Qiita) (string, string) {
 		fmt.Errorf("Failed. %v", err)
 	}
 	return url, content.Body
-}
-
-func writeKeyword() {
-	var snippets snippet.Snippets
-	file := config.KeywordFile()
-	snippets.Load(file)
-	newSnippet := snippet.SnippetInfo{
-		SearchKeyword: argument,
-	}
-	snippets.Snippets = append(snippets.Snippets, newSnippet)
-	if err := snippets.Save(file); err != nil {
-		fmt.Errorf("Failed. %v", err)
-	}
 }

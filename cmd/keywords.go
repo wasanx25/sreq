@@ -15,7 +15,7 @@ var keywordsCmd = &cobra.Command{
 	Long:  "Show Keywords History",
 	Run: func(cmd *cobra.Command, args []string) {
 		var snippets snippet.Snippets
-		file := config.KeywordFile()
+		file := config.HistoryFile()
 		snippets.Load(file)
 		for _, snip := range snippets.Snippets {
 			fmt.Println(color.CyanString("keyword: " + snip.SearchKeyword))
