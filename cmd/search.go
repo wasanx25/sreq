@@ -18,6 +18,7 @@ import (
 
 var pagenation int
 var argument string
+var editor string
 
 type Qiita struct {
 	Title string `json: "title"`
@@ -38,6 +39,8 @@ var searchCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(searchCmd)
+	searchCmd.Flags().StringVar(&editor, "editor", "vim", "You choise editor")
+	searchCmd.Flags().Bool("browse", false, "Use open browse")
 }
 
 func execute() {
@@ -86,7 +89,6 @@ func scan(content []Qiita) {
 			if cfg.General.OutputType == "editor" {
 				text := []byte(body)
 				ioutil.WriteFile("/tmp/sreq.txt", text, os.ModePerm)
-				editor := cfg.General.Editor
 				cmd := exec.Command(editor, "/tmp/sreq.txt")
 				cmd.Stdin = os.Stdin
 				cmd.Stdout = os.Stdout
