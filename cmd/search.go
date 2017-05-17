@@ -19,6 +19,7 @@ import (
 var pagenation int
 var argument string
 var editor string
+var browse bool
 
 type Qiita struct {
 	Title string `json: "title"`
@@ -86,21 +87,37 @@ func scan(content []Qiita) {
 
 			var cfg config.Config
 			cfg.Load()
-			if cfg.General.OutputType == "editor" {
-				text := []byte(body)
-				ioutil.WriteFile("/tmp/sreq.txt", text, os.ModePerm)
-				cmd := exec.Command(editor, "/tmp/sreq.txt")
-				cmd.Stdin = os.Stdin
-				cmd.Stdout = os.Stdout
-				cmd.Run()
-			} else if cfg.General.OutputType == "browse" {
-				exec.Command("open", url).Run()
+			if editor == "" && browse == false {
+				if cfg.General.OutputType == "editor" {
+					editor = cfg.General.Editor
+					execEditor(body, editor)
+				} else if cfg.General.OutputType == "browse" {
+					execBrowse(url)
+				}
+			} else if editor != "" {
+				execEditor(body, editor)
+			} else if browse == true {
+				execBrowse(url)
+			} else {
+				fmt.Println("You should choice editor or browse")
 			}
-			fmt.Println(err)
 		}
 	} else {
 		fmt.Println(err)
 	}
+}
+
+func execBrowse(url string) {
+	exec.Command("open", url).Run()
+}
+
+func execEditor(body string, edotor string) {
+	text := []byte(body)
+	ioutil.WriteFile("/tmp/sreq.txt", text, os.ModePerm)
+	cmd := exec.Command(editor, "/tmp/sreq.txt")
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Run()
 }
 
 func writeHistory(content Qiita) (string, string) {
