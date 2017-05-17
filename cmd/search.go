@@ -19,12 +19,6 @@ var argument string
 var editor string
 var browse bool
 
-type Qiita struct {
-	Title string `json: "title"`
-	Url   string `json: "url"`
-	Body  string `json: "body"`
-}
-
 var searchCmd = &cobra.Command{
 	Use:   "search",
 	Short: "Search on Qiita",
@@ -38,12 +32,12 @@ var searchCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(searchCmd)
-	searchCmd.Flags().StringVar(&editor, "editor", "vim", "You choise editor")
-	searchCmd.Flags().Bool("browse", false, "Use open browse")
+	searchCmd.Flags().StringVar(&editor, "editor", "vim", "Open editor")
+	searchCmd.Flags().Bool("browse", false, "Open browse")
 }
 
 func execute() {
-	resp, err := http.Get("http://qiita.com/api/v2/items?page=" + strconv.Itoa(pagenation) + "&per_page=10&query=" + argument)
+	resp, err := http.Get(config.BaseURL(strconv.Itoa(pagenation), argument))
 	if err == nil {
 		defer resp.Body.Close()
 		if b, err := ioutil.ReadAll(resp.Body); err == nil {
@@ -53,7 +47,7 @@ func execute() {
 }
 
 func rendering(b []byte) {
-	var contents []Qiita
+	var contents []config.Qiita
 	json.Unmarshal(b, &contents)
 	for i, c := range contents {
 		fmt.Print(color.YellowString(strconv.Itoa(i) + " -> "))
@@ -72,7 +66,7 @@ func rendering(b []byte) {
 	scan(contents)
 }
 
-func scan(content []Qiita) {
+func scan(content []config.Qiita) {
 	var num string
 	if _, err := fmt.Scanf("%s", &num); err == nil {
 		if num == "n" {
@@ -100,7 +94,7 @@ func scan(content []Qiita) {
 	}
 }
 
-func writeHistory(content Qiita) (string, string) {
+func writeHistory(content config.Qiita) (string, string) {
 	var snippets snippet.Snippets
 	file := config.HistoryFile()
 	snippets.Load(file)
