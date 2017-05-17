@@ -1,0 +1,9 @@
+package: github.com/wataru0225/sreq
+import:
+- package: github.com/BurntSushi/toml
+  version: ^0.3.0
+- package: github.com/Songmu/prompter
+  version: ^0.1.0
+- package: github.com/fatih/color
+  version: ^1.4.1
+- package: github.com/spf13/cobra
