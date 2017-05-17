@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
-	"os/exec"
 	"strconv"
 	"strings"
 
@@ -76,8 +74,7 @@ func rendering(b []byte) {
 
 func scan(content []Qiita) {
 	var num string
-	_, err := fmt.Scanf("%s", &num)
-	if err == nil {
+	if _, err := fmt.Scanf("%s", &num); err == nil {
 		if num == "n" {
 			pagenation++
 			execute()
@@ -87,37 +84,20 @@ func scan(content []Qiita) {
 
 			var cfg config.Config
 			cfg.Load()
-			if editor == "" && browse == false {
-				if cfg.General.OutputType == "editor" {
-					editor = cfg.General.Editor
-					execEditor(body, editor)
-				} else if cfg.General.OutputType == "browse" {
-					execBrowse(url)
-				}
-			} else if editor != "" {
-				execEditor(body, editor)
-			} else if browse == true {
-				execBrowse(url)
-			} else {
-				fmt.Println("You should choice editor or browse")
+
+			if cfg.General.OutputType == "browse" || browse == true {
+				OpenBrowse(url)
+				return
 			}
+
+			if editor == "" {
+				editor = cfg.General.Editor
+			}
+			OpenEditor(body, editor)
 		}
 	} else {
 		fmt.Println(err)
 	}
-}
-
-func execBrowse(url string) {
-	exec.Command("open", url).Run()
-}
-
-func execEditor(body string, edotor string) {
-	text := []byte(body)
-	ioutil.WriteFile("/tmp/sreq.txt", text, os.ModePerm)
-	cmd := exec.Command(editor, "/tmp/sreq.txt")
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Run()
 }
 
 func writeHistory(content Qiita) (string, string) {
