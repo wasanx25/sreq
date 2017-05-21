@@ -9,3 +9,7 @@ update: glide
 
 install: main.go deps
 		go install
+
+lint: 
+		@go get -v github.com/golang/lint/golint
+		golint $(shell glide nv)
