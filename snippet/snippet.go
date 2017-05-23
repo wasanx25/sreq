@@ -7,16 +7,19 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+// Snippets array of SnippetInfo
 type Snippets struct {
 	Snippets []SnippetInfo `toml:"snippets"`
 }
 
+// SnippetInfo for search of qiita
 type SnippetInfo struct {
 	SearchKeyword string `toml:"search_keyword"`
 	Url           string `toml:"url"`
 	Title         string `toml:"title"`
 }
 
+// Load reading snippet file
 func (snippets *Snippets) Load(fileName string) error {
 	snippetFile := fileName
 	if _, err := toml.DecodeFile(snippetFile, snippets); err != nil {
@@ -25,6 +28,7 @@ func (snippets *Snippets) Load(fileName string) error {
 	return nil
 }
 
+// Save snippet file
 func (snippets *Snippets) Save(fileName string) error {
 	f, err := os.Create(fileName)
 	defer f.Close()

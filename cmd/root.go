@@ -13,12 +13,14 @@ const (
 	version = "0.1.0"
 )
 
+// RootCmd initialize cmd base
 var RootCmd = &cobra.Command{
 	Use:   "sreq",
 	Short: "Search reference on Qiita",
 	Long:  "If you do not know or want to research, Search on Qiita.",
 }
 
+// Execute RootCmd
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
 		fmt.Println(err)

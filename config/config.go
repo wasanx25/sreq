@@ -8,23 +8,28 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+// HistoryFile get command-history file-name
 func HistoryFile() string {
 	return filepath.Join(os.Getenv("HOME"), ".config", "sreq", "sreq-history.toml")
 }
 
+// ConfigFile get config file-name
 func ConfigFile() string {
 	return filepath.Join(os.Getenv("HOME"), ".config", "sreq", "config.toml")
 }
 
+// Config config
 type Config struct {
 	General GeneralConfig
 }
 
+// GeneralConfig general-config
 type GeneralConfig struct {
 	OutputType string `toml:"output_type"`
 	Editor     string `toml:"editor"`
 }
 
+// Load load config-file
 func (cfg *Config) Load() error {
 	configFile := ConfigFile()
 	if _, err := toml.DecodeFile(configFile, cfg); err != nil {
@@ -33,6 +38,7 @@ func (cfg *Config) Load() error {
 	return nil
 }
 
+// Save save config-file
 func (cfg *Config) Save() error {
 	configFile := ConfigFile()
 	f, err := os.Create(configFile)
