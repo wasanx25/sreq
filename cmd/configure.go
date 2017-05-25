@@ -10,9 +10,10 @@ import (
 
 // configureCmd represents the configure command
 var configureCmd = &cobra.Command{
-	Use:   "configure",
-	Short: "Setting configuration",
-	Long:  "Setting configuration",
+	Use:     "configure",
+	Aliases: []string{"c"},
+	Short:   "Setting configuration (short-cut alias: \"c\")",
+	Long:    "Setting configuration (short-cut alias: \"c\")",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("configure called")
 		output := (&prompter.Prompter{

@@ -20,9 +20,10 @@ var editor string
 var browse bool
 
 var searchCmd = &cobra.Command{
-	Use:   "search",
-	Short: "Search on Qiita",
-	Long:  "Search on Qiita",
+	Use:     "search",
+	Aliases: []string{"s"},
+	Short:   "Search on Qiita (short-cut alias: \"s\")",
+	Long:    "Search on Qiita (short-cut alias: \"s\")",
 	Run: func(cmd *cobra.Command, args []string) {
 		pagenation = 1
 		argument = strings.Join(args, ",")

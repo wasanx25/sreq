@@ -10,9 +10,10 @@ import (
 )
 
 var keywordsCmd = &cobra.Command{
-	Use:   "keywords",
-	Short: "Show Keywords History",
-	Long:  "Show Keywords History",
+	Use:     "keywords",
+	Aliases: []string{"k"},
+	Short:   "Show Keywords History (short-cut alias: \"k\")",
+	Long:    "Show Keywords History (short-cut alias: \"k\")",
 	Run: func(cmd *cobra.Command, args []string) {
 		var snippets snippet.Snippets
 		file := config.HistoryFile()

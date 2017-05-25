@@ -9,9 +9,10 @@ import (
 )
 
 var resetCmd = &cobra.Command{
-	Use:   "reset",
-	Short: "Reset history",
-	Long:  "Reset history",
+	Use:     "reset",
+	Aliases: []string{"r"},
+	Short:   "Reset history (short-cut alias: \"r\")",
+	Long:    "Reset history (short-cut alias: \"r\")",
 	Run: func(cmd *cobra.Command, args []string) {
 		var file = filepath.Join(os.Getenv("HOME"), ".config", "sreq", "sreq-history.toml")
 		if err := os.Remove(file); err != nil {

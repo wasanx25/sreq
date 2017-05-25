@@ -10,9 +10,10 @@ import (
 )
 
 var historyCmd = &cobra.Command{
-	Use:   "history",
-	Short: "Search history",
-	Long:  "Search history",
+	Use:     "history",
+	Aliases: []string{"h"},
+	Short:   "Search history (short-cut alias: \"h\")",
+	Long:    "Search history (short-cut alias: \"h\")",
 	Run: func(cmd *cobra.Command, args []string) {
 		var snippets snippet.Snippets
 		file := config.HistoryFile()
