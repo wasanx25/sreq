@@ -26,8 +26,12 @@ var searchCmd = &cobra.Command{
 	Long:    "Search on Qiita (short-cut alias: \"s\")",
 	Run: func(cmd *cobra.Command, args []string) {
 		pagenation = 1
-		argument = strings.Join(args, ",")
-		execute()
+		if len(args) == 0 {
+			fmt.Println("Failed to not argument of search keyword.")
+		} else {
+			argument = strings.Join(args, ",")
+			execute()
+		}
 	},
 }
 
