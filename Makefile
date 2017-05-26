@@ -12,4 +12,4 @@ install: main.go deps
 
 lint: 
 		@go get -v github.com/golang/lint/golint
-		golint $(shell glide nv)
+		golint -min_confidence=1.0 $(shell glide nv)
