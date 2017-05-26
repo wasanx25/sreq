@@ -1,5 +1,6 @@
 package config
 
+// Qiita based on Qiita API
 type Qiita struct {
 	Title string `json: "title"`
 	Url   string `json: "url"`
