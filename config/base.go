@@ -2,9 +2,9 @@ package config
 
 // Qiita based on Qiita API
 type Qiita struct {
-	Title string `json: "title"`
-	Url   string `json: "url"`
-	Body  string `json: "body"`
+	Title string `json:"title"`
+	URL   string `json:"url"`
+	Body  string `json:"body"`
 }
 
 // BaseURL get qiita api URL

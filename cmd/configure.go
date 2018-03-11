@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/Songmu/prompter"
 	"github.com/spf13/cobra"
@@ -43,7 +44,8 @@ var configureCmd = &cobra.Command{
 
 		cfg.General = newCfg
 		if err := cfg.Save(); err != nil {
-			fmt.Errorf("Failed. %v", err)
+			fmt.Printf("Failed. %v", err)
+			os.Exit(2)
 		} else {
 			fmt.Println("your setting OutputType is " + output)
 			fmt.Println("your setting Editor is " + editor)

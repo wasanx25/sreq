@@ -31,10 +31,9 @@ var searchCmd = &cobra.Command{
 
 		argument := strings.Join(args, ",")
 		pagenation := 1
-		end := false
 
 		for {
-			end = execute(argument, pagenation)
+			end := execute(argument, pagenation)
 			if end {
 				break
 			}
@@ -88,23 +87,22 @@ func scan(content []*config.Qiita, argument string) bool {
 	if _, err := fmt.Scanf("%s", &num); err == nil {
 		if num == "n" {
 			return false
-		} else {
-			numb, _ := strconv.Atoi(num)
-			url, body := writeHistory(content[numb], argument)
-
-			var cfg config.Config
-			cfg.Load()
-
-			if cfg.General.OutputType == "browse" || browse == true {
-				OpenBrowse(url)
-				return true
-			}
-
-			if editor == "" {
-				editor = cfg.General.Editor
-			}
-			OpenEditor(body, editor)
 		}
+		numb, _ := strconv.Atoi(num)
+		url, body := writeHistory(content[numb], argument)
+
+		var cfg config.Config
+		cfg.Load()
+
+		if cfg.General.OutputType == "browse" || browse == true {
+			OpenBrowse(url)
+			return true
+		}
+
+		if editor == "" {
+			editor = cfg.General.Editor
+		}
+		OpenEditor(body, editor)
 	} else {
 		fmt.Println(err)
 	}
@@ -115,7 +113,7 @@ func writeHistory(content *config.Qiita, argument string) (string, string) {
 	var snippets snippet.Snippets
 	file := config.HistoryFile()
 	snippets.Load(file)
-	url := content.Url
+	url := content.URL
 	newSnippet := snippet.SnippetInfo{
 		SearchKeyword: argument,
 		Url:           url,
@@ -123,7 +121,8 @@ func writeHistory(content *config.Qiita, argument string) (string, string) {
 	}
 	snippets.Snippets = append(snippets.Snippets, newSnippet)
 	if err := snippets.Save(file); err != nil {
-		fmt.Errorf("Failed. %v", err)
+		fmt.Printf("Failed. %v", err)
+		os.Exit(2)
 	}
 	return url, content.Body
 }

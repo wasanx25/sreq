@@ -43,11 +43,12 @@ var versionCmd = &cobra.Command{
 }
 
 func initConfig() {
-	cfgFile := config.ConfigFile()
+	cfgFile := config.GetConfigFile()
 	if _, err := os.Stat(cfgFile); err != nil {
 		dir := filepath.Join(os.Getenv("HOME"), ".config", "sreq")
 		if err := os.MkdirAll(dir, 0700); err != nil {
-			fmt.Errorf("cannot create directory: %v", err)
+			fmt.Printf("cannot create directory: %v", err)
+			os.Exit(2)
 		}
 
 		var cfg config.Config
@@ -58,7 +59,8 @@ func initConfig() {
 		}
 
 		if err := cfg.Save(); err != nil {
-			fmt.Errorf("Failed. %v", err)
+			fmt.Printf("Failed. %v", err)
+			os.Exit(2)
 		}
 	}
 }
