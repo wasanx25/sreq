@@ -13,8 +13,8 @@ func HistoryFile() string {
 	return filepath.Join(os.Getenv("HOME"), ".config", "sreq", "sreq-history.toml")
 }
 
-// ConfigFile get config file-name
-func ConfigFile() string {
+// GetConfigFile get config file-name
+func GetConfigFile() string {
 	return filepath.Join(os.Getenv("HOME"), ".config", "sreq", "config.toml")
 }
 
@@ -31,7 +31,7 @@ type GeneralConfig struct {
 
 // Load load config-file
 func (cfg *Config) Load() error {
-	configFile := ConfigFile()
+	configFile := GetConfigFile()
 	if _, err := toml.DecodeFile(configFile, cfg); err != nil {
 		return fmt.Errorf("Failed to load snippet file. %v", err)
 	}
@@ -40,7 +40,7 @@ func (cfg *Config) Load() error {
 
 // Save save config-file
 func (cfg *Config) Save() error {
-	configFile := ConfigFile()
+	configFile := GetConfigFile()
 	f, err := os.Create(configFile)
 	defer f.Close()
 	if err != nil {
