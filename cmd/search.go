@@ -44,8 +44,6 @@ var searchCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(searchCmd)
-	searchCmd.Flags().StringVar(&editor, "editor", "vim", "Open editor")
-	searchCmd.Flags().Bool("browse", false, "Open browse")
 }
 
 func execute(argument string, pagenation int) bool {
@@ -89,27 +87,21 @@ func scan(content []*config.Qiita, argument string) bool {
 			return false
 		}
 		numb, _ := strconv.Atoi(num)
-		url, body := writeHistory(content[numb], argument)
 
-		var cfg config.Config
-		cfg.Load()
+		target := content[numb]
 
-		if cfg.General.OutputType == "browse" || browse == true {
-			OpenBrowse(url)
-			return true
-		}
+		go func() {
+			writeHistory(target, argument)
+		}()
 
-		if editor == "" {
-			editor = cfg.General.Editor
-		}
-		OpenEditor(body, editor)
+		OpenEditor(target.Body, "less")
 	} else {
 		fmt.Println(err)
 	}
 	return true
 }
 
-func writeHistory(content *config.Qiita, argument string) (string, string) {
+func writeHistory(content *config.Qiita, argument string) {
 	var snippets snippet.Snippets
 	file := config.HistoryFile()
 	snippets.Load(file)
@@ -124,5 +116,4 @@ func writeHistory(content *config.Qiita, argument string) (string, string) {
 		fmt.Printf("Failed. %v", err)
 		os.Exit(2)
 	}
-	return url, content.Body
 }
