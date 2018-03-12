@@ -124,9 +124,7 @@ func scan(contents []*Content, argument string) bool {
 
 	OpenEditor(qiita.Markdown, "less")
 
-	go func() {
-		writeHistory(qiita, argument)
-	}()
+	writeHistory(qiita, argument)
 
 	return true
 }
