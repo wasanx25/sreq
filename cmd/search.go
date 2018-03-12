@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/wataru0225/sreq/config"
@@ -42,62 +43,91 @@ var searchCmd = &cobra.Command{
 	},
 }
 
+// Content is structure that scraping content from Qiita
+type Content struct {
+	ID    string
+	Title string
+	Desc  string
+}
+
 func init() {
 	RootCmd.AddCommand(searchCmd)
 }
 
 func execute(argument string, pagenation int) bool {
-	resp, err := http.Get(config.BaseURL(strconv.Itoa(pagenation), argument))
-	end := true
-	if err == nil {
-		defer resp.Body.Close()
-		if b, err := ioutil.ReadAll(resp.Body); err == nil {
-			contents := rendering(b)
-			end = scan(contents, argument)
-		}
+	doc, err := goquery.NewDocument(config.PageURL(argument, "rel", strconv.Itoa(pagenation)))
+	if err != nil {
+		fmt.Printf("Scraping failed -> err: %v", err)
+		return true
 	}
+
+	var contents []*Content
+
+	doc.Find(".searchResult").Each(func(_ int, s *goquery.Selection) {
+		itemID, _ := s.Attr("data-uuid")
+		title := s.Find(".searchResult_itemTitle a").Text()
+		desc := s.Find(".searchResult_snippet").Text()
+
+		content := &Content{
+			ID:    itemID,
+			Title: title,
+			Desc:  desc,
+		}
+
+		contents = append(contents, content)
+	})
+
+	rendering(contents)
+	end := scan(contents, argument)
 
 	return end
 }
 
-func rendering(b []byte) []*config.Qiita {
-	var contents []*config.Qiita
-	json.Unmarshal(b, &contents)
-	for i, c := range contents {
-		fmt.Print(color.YellowString(strconv.Itoa(i) + " -> "))
-		fmt.Println(c.Title)
-		if count := len(c.Body); count > 256 {
-			fmt.Println(color.GreenString(strings.Replace(c.Body, "\n", "", -1)[0:256]))
-		} else {
-			fmt.Println(color.GreenString(strings.Replace(c.Body, "\n", "", -1)))
-		}
+func rendering(contents []*Content) {
+	for num, content := range contents {
+		fmt.Print(color.YellowString(strconv.Itoa(num) + " -> "))
+		fmt.Println(content.Title)
+		fmt.Println(color.GreenString(content.Desc))
 		fmt.Print("\n")
 	}
 	if len(contents) == 10 {
 		fmt.Println(color.YellowString("n -> ") + "next page")
 	}
 	fmt.Print("SELECT > ")
-	return contents
 }
 
-func scan(content []*config.Qiita, argument string) bool {
+func scan(contents []*Content, argument string) bool {
 	var num string
-	if _, err := fmt.Scanf("%s", &num); err == nil {
-		if num == "n" {
-			return false
-		}
-		numb, _ := strconv.Atoi(num)
-
-		target := content[numb]
-
-		go func() {
-			writeHistory(target, argument)
-		}()
-
-		OpenEditor(target.Body, "less")
-	} else {
+	if _, err := fmt.Scanf("%s", &num); err != nil {
 		fmt.Println(err)
 	}
+
+	if num == "n" {
+		return false
+	}
+
+	index, _ := strconv.Atoi(num)
+	target := contents[index]
+
+	resp, err := http.Get(config.APIURL(target.ID))
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer resp.Body.Close()
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+	var qiita *config.Qiita
+	json.Unmarshal(b, &qiita)
+
+	OpenEditor(qiita.Markdown, "less")
+
+	go func() {
+		writeHistory(qiita, argument)
+	}()
+
 	return true
 }
 
