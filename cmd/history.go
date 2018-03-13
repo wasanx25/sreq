@@ -17,7 +17,7 @@ var historyCmd = &cobra.Command{
 		var snippets snippet.Snippets
 		snippets.Load()
 		for _, snip := range snippets.Snippets {
-			fmt.Println(color.YellowString("url:     " + snip.Url))
+			fmt.Println(color.YellowString("url:     " + snip.URL))
 			fmt.Println(color.GreenString("title: 	 " + snip.Title))
 			fmt.Println(color.CyanString("keyword: " + snip.SearchKeyword))
 			fmt.Println(color.WhiteString("-------------------------------"))

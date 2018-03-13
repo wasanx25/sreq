@@ -133,9 +133,9 @@ func writeHistory(content *config.Qiita, argument string) {
 	var snippets snippet.Snippets
 	snippets.Load()
 	url := content.URL
-	newSnippet := snippet.SnippetInfo{
+	newSnippet := snippet.Snippet{
 		SearchKeyword: argument,
-		Url:           url,
+		URL:           url,
 		Title:         content.Title,
 	}
 	snippets.Snippets = append(snippets.Snippets, newSnippet)

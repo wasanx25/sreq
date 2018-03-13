@@ -8,15 +8,15 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-// Snippets array of SnippetInfo
+// Snippets array of Snippet
 type Snippets struct {
-	Snippets []SnippetInfo `toml:"snippets"`
+	Snippets []Snippet `toml:"snippets"`
 }
 
-// SnippetInfo for search of qiita
-type SnippetInfo struct {
+// Snippet for search of qiita
+type Snippet struct {
 	SearchKeyword string `toml:"search_keyword"`
-	Url           string `toml:"url"`
+	URL           string `toml:"url"`
 	Title         string `toml:"title"`
 }
 
