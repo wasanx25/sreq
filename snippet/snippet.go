@@ -3,6 +3,7 @@ package snippet
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/BurntSushi/toml"
 )
@@ -20,20 +21,23 @@ type SnippetInfo struct {
 }
 
 // Load reading snippet file
-func (snippets *Snippets) Load(fileName string) error {
-	snippetFile := fileName
-	if _, err := toml.DecodeFile(snippetFile, snippets); err != nil {
+func (snippets *Snippets) Load() error {
+	if _, err := toml.DecodeFile(getHistoryFile(), snippets); err != nil {
 		return fmt.Errorf("Failed to load snippet file. %v", err)
 	}
 	return nil
 }
 
 // Save snippet file
-func (snippets *Snippets) Save(fileName string) error {
-	f, err := os.Create(fileName)
+func (snippets *Snippets) Save() error {
+	f, err := os.Create(getHistoryFile())
 	defer f.Close()
 	if err != nil {
 		return fmt.Errorf("Failed to save snippet file. err: %s", err)
 	}
 	return toml.NewEncoder(f).Encode(snippets)
+}
+
+func getHistoryFile() string {
+	return filepath.Join(os.Getenv("HOME"), ".config", "sreq", "sreq-history.toml")
 }

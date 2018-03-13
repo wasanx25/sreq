@@ -5,7 +5,6 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"github.com/wataru0225/sreq/config"
 	"github.com/wataru0225/sreq/snippet"
 )
 
@@ -16,8 +15,7 @@ var historyCmd = &cobra.Command{
 	Long:    "Search history (short-cut alias: \"h\")",
 	Run: func(cmd *cobra.Command, args []string) {
 		var snippets snippet.Snippets
-		file := config.HistoryFile()
-		snippets.Load(file)
+		snippets.Load()
 		for _, snip := range snippets.Snippets {
 			fmt.Println(color.YellowString("url:     " + snip.Url))
 			fmt.Println(color.GreenString("title: 	 " + snip.Title))

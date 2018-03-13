@@ -131,8 +131,7 @@ func scan(contents []*Content, argument string) bool {
 
 func writeHistory(content *config.Qiita, argument string) {
 	var snippets snippet.Snippets
-	file := config.HistoryFile()
-	snippets.Load(file)
+	snippets.Load()
 	url := content.URL
 	newSnippet := snippet.SnippetInfo{
 		SearchKeyword: argument,
@@ -140,7 +139,7 @@ func writeHistory(content *config.Qiita, argument string) {
 		Title:         content.Title,
 	}
 	snippets.Snippets = append(snippets.Snippets, newSnippet)
-	if err := snippets.Save(file); err != nil {
+	if err := snippets.Save(); err != nil {
 		fmt.Printf("Failed. %v", err)
 		os.Exit(2)
 	}
