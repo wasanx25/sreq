@@ -50,12 +50,19 @@ type Content struct {
 	Desc  string
 }
 
+var sort string
+
 func init() {
 	RootCmd.AddCommand(searchCmd)
+	searchCmd.Flags().StringVar(&sort, "sort", "rel", "Select rel or created or stock for sort")
 }
 
 func execute(argument string, pagenation int) bool {
-	doc, err := goquery.NewDocument(config.PageURL(argument, "rel", strconv.Itoa(pagenation)))
+	if sort != "rel" && sort != "created" && sort != "stock" {
+		fmt.Println("Please select 'rel' or 'created' or 'stock'")
+		return true
+	}
+	doc, err := goquery.NewDocument(config.PageURL(argument, sort, strconv.Itoa(pagenation)))
 	if err != nil {
 		fmt.Printf("Scraping failed -> err: %v", err)
 		return true
