@@ -6,11 +6,18 @@ import (
 	"os/exec"
 )
 
-// OpenEditor open your choosing editor.
-func OpenEditor(body string, editor string) {
+func openLynx(html string) {
+	execCmd(html, "lynx", "/tmp/sreq.html")
+}
+
+func openEditor(body string, editor string) {
+	execCmd(body, editor, "/tmp/sreq.txt")
+}
+
+func execCmd(body string, cmdName string, file string) {
 	text := []byte(body)
-	ioutil.WriteFile("/tmp/sreq.txt", text, os.ModePerm)
-	cmd := exec.Command(editor, "/tmp/sreq.txt")
+	ioutil.WriteFile(file, text, os.ModePerm)
+	cmd := exec.Command(cmdName, file)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Run()

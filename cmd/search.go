@@ -17,7 +17,7 @@ import (
 )
 
 var editor string
-var browse bool
+var lynx bool
 
 var searchCmd = &cobra.Command{
 	Use:     "search",
@@ -55,6 +55,7 @@ var sort string
 func init() {
 	RootCmd.AddCommand(searchCmd)
 	searchCmd.Flags().StringVar(&sort, "sort", "rel", "Select rel or created or stock for sort")
+	searchCmd.Flags().BoolVar(&lynx, "lynx", false, "Use lynx CUI browse")
 }
 
 func execute(argument string, pagenation int) bool {
@@ -129,10 +130,14 @@ func scan(contents []*Content, argument string) bool {
 	var qiita *config.Qiita
 	json.Unmarshal(b, &qiita)
 
-	OpenEditor(qiita.Markdown, "less")
-
 	writeHistory(qiita, argument)
 
+	if lynx {
+		openLynx(qiita.HTML)
+		return true
+	}
+
+	openEditor(qiita.Markdown, "less")
 	return true
 }
 
