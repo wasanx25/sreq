@@ -106,23 +106,15 @@ func scan(contents []*Content, argument string, lynx bool) bool {
 	writeHistory(qiita, argument)
 
 	if lynx {
-		openLynx(qiita.HTML)
+		openFile(qiita.HTML, "lynx", "/tmp/sreq.html")
 		return true
 	}
 
-	openEditor(qiita.Markdown, "less")
+	openFile(qiita.Markdown, "less", "/tmp/sreq.txt")
 	return true
 }
 
-func openLynx(html string) {
-	execCmd(html, "lynx", "/tmp/sreq.html")
-}
-
-func openEditor(body string, editor string) {
-	execCmd(body, editor, "/tmp/sreq.txt")
-}
-
-func execCmd(body string, cmdName string, file string) {
+func openFile(body string, cmdName string, file string) {
 	text := []byte(body)
 	ioutil.WriteFile(file, text, os.ModePerm)
 	cmd := exec.Command(cmdName, file)
