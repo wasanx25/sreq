@@ -11,8 +11,6 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/fatih/color"
-	"github.com/wataru0225/sreq/config"
-	"github.com/wataru0225/sreq/snippet"
 )
 
 // Content is structure that scraping content from Qiita
@@ -40,7 +38,7 @@ func ExecSearch(argument string, pagenation int, sort string, lynx bool) {
 }
 
 func search(argument string, pagenation int, sort string) ([]*Content, error) {
-	doc, err := goquery.NewDocument(config.PageURL(argument, sort, strconv.Itoa(pagenation)))
+	doc, err := goquery.NewDocument(PageURL(argument, sort, strconv.Itoa(pagenation)))
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +88,7 @@ func scan(contents []*Content, argument string, lynx bool) bool {
 	index, _ := strconv.Atoi(num)
 	target := contents[index]
 
-	resp, err := http.Get(config.APIURL(target.ID))
+	resp, err := http.Get(APIURL(target.ID))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -100,7 +98,7 @@ func scan(contents []*Content, argument string, lynx bool) bool {
 	if err != nil {
 		fmt.Println(err)
 	}
-	var qiita *config.Qiita
+	var qiita *Qiita
 	json.Unmarshal(b, &qiita)
 
 	writeHistory(qiita, argument)
@@ -123,11 +121,11 @@ func openFile(body string, cmdName string, file string) {
 	cmd.Run()
 }
 
-func writeHistory(content *config.Qiita, argument string) {
-	var snippets snippet.Snippets
+func writeHistory(content *Qiita, argument string) {
+	var snippets Snippets
 	snippets.Load()
 	url := content.URL
-	newSnippet := snippet.Snippet{
+	newSnippet := Snippet{
 		SearchKeyword: argument,
 		URL:           url,
 		Title:         content.Title,

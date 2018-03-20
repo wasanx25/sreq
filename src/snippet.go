@@ -1,4 +1,4 @@
-package snippet
+package src
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package config
+package src
 
 // Qiita based on Qiita API
 type Qiita struct {
