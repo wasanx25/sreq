@@ -38,7 +38,7 @@ func ExecSearch(argument string, pagenation int, sort string, lynx bool) {
 }
 
 func search(argument string, pagenation int, sort string) ([]*Content, error) {
-	doc, err := goquery.NewDocument(PageURL(argument, sort, strconv.Itoa(pagenation)))
+	doc, err := goquery.NewDocument(getPageURL(argument, sort, strconv.Itoa(pagenation)))
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func scan(contents []*Content, argument string, lynx bool) bool {
 	index, _ := strconv.Atoi(num)
 	target := contents[index]
 
-	resp, err := http.Get(APIURL(target.ID))
+	resp, err := http.Get(getAPIURL(target.ID))
 	if err != nil {
 		fmt.Println(err)
 	}
