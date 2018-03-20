@@ -12,7 +12,6 @@ var keywordsCmd = &cobra.Command{
 	Use:     "keywords",
 	Aliases: []string{"k"},
 	Short:   "Show Keywords History (short-cut alias: \"k\")",
-	Long:    "Show Keywords History (short-cut alias: \"k\")",
 	Run: func(cmd *cobra.Command, args []string) {
 		var snippets src.Snippets
 		snippets.Load()
