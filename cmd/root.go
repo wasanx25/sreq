@@ -15,7 +15,7 @@ const (
 var RootCmd = &cobra.Command{
 	Use:   "sreq",
 	Short: "Search reference on Qiita",
-	Long:  "If you do not know or want to research, Search on Qiita.",
+	Long:  "If you do not know or want to research, search on Qiita.",
 }
 
 // Execute RootCmd
