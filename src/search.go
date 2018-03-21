@@ -104,18 +104,19 @@ func scan(contents []*Content, argument string, lynx bool) bool {
 	writeHistory(qiita, argument)
 
 	if lynx {
-		openFile(qiita.HTML, "lynx", "/tmp/sreq.html")
+		openFile(qiita.HTML, "/tmp/sreq.html", "lynx", "-display_charset=utf-8", "-assume_charset=utf-8")
 		return true
 	}
 
-	openFile(qiita.Markdown, "less", "/tmp/sreq.txt")
+	openFile(qiita.Markdown, "/tmp/sreq.txt", "less")
 	return true
 }
 
-func openFile(body string, cmdName string, file string) {
+func openFile(body string, file string, cmdName ...string) {
 	text := []byte(body)
 	ioutil.WriteFile(file, text, os.ModePerm)
-	cmd := exec.Command(cmdName, file)
+	cmdName = append(cmdName, file)
+	cmd := exec.Command(cmdName[0], cmdName[1:]...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Run()
