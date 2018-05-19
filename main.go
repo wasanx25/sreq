@@ -1,6 +1,6 @@
 package main
 
-import "github.com/wataru0225/sreq/cmd"
+import "github.com/wasanx25/sreq/cmd"
 
 func main() {
 	cmd.Execute()

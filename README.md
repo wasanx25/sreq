@@ -2,7 +2,7 @@
 Command-Line to Search on Qiita and view using `less` or `lynx`.
 
 ## Installation
-Download binary from [here](https://github.com/wataru0225/sreq/releases/latest).
+Download binary from [here](https://github.com/wasanx25/sreq/releases/latest).
 Or clone this repository and go install.
 
 

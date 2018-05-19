@@ -5,7 +5,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"github.com/wataru0225/sreq/src"
+	"github.com/wasanx25/sreq/src"
 )
 
 var historyCmd = &cobra.Command{
