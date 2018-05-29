@@ -9,9 +9,11 @@ import (
 	"github.com/wasanx25/sreq/src"
 )
 
-var editor string
-var lynx bool
-var sort string
+var (
+	editor string
+	lynx   bool
+	sort   string
+)
 
 var searchCmd = &cobra.Command{
 	Use:     "search",
