@@ -18,21 +18,16 @@ var searchCmd = &cobra.Command{
 	Aliases: []string{"s"},
 	Short:   "Search on Qiita (short-cut alias: \"s\")",
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) == 0 {
-			fmt.Println("Failed to not argument of search keyword.")
-			os.Exit(2)
-		}
-
-		if sort != "rel" && sort != "created" && sort != "stock" {
-			fmt.Println("Please select 'rel' or 'created' or 'stock'")
-			os.Exit(2)
-		}
-
 		searcher := &src.Searcher{
 			Keywords:   strings.Join(args, ","),
 			Pagination: 1,
 			Sort:       sort,
 			Lynx:       lynx,
+		}
+
+		if err := searcher.Validate(); err != nil {
+			fmt.Println(err)
+			os.Exit(2)
 		}
 		searcher.Exec()
 	},
