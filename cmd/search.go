@@ -28,10 +28,8 @@ var searchCmd = &cobra.Command{
 			os.Exit(2)
 		}
 
-		argument := strings.Join(args, ",")
-
 		searcher := &src.Searcher{
-			Keywords:   argument,
+			Keywords:   strings.Join(args, ","),
 			Pagination: 1,
 			Sort:       sort,
 			Lynx:       lynx,
