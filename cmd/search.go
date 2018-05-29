@@ -29,9 +29,14 @@ var searchCmd = &cobra.Command{
 		}
 
 		argument := strings.Join(args, ",")
-		pagenation := 1
 
-		src.ExecSearch(argument, pagenation, sort, lynx)
+		searcher := &src.Searcher{
+			Keywords:   argument,
+			Pagination: 1,
+			Sort:       sort,
+			Lynx:       lynx,
+		}
+		searcher.Exec()
 	},
 }
 

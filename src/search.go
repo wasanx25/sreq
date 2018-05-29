@@ -20,23 +20,6 @@ type Content struct {
 	Desc  string
 }
 
-// ExecSearch is scraping and viewing contents and selecting contents
-func ExecSearch(argument string, pagenation int, sort string, lynx bool) {
-	for {
-		contents, err := search(argument, pagenation, sort)
-		if err != nil {
-			fmt.Println(err)
-			break
-		}
-		viewList(contents)
-		endPhase := scan(contents, argument, lynx)
-		if endPhase {
-			break
-		}
-		pagenation++
-	}
-}
-
 func search(argument string, pagenation int, sort string) ([]*Content, error) {
 	doc, err := goquery.NewDocument(getPageURL(argument, sort, strconv.Itoa(pagenation)))
 	if err != nil {
