@@ -12,7 +12,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/fatih/color"
 	"github.com/wasanx25/sreq/config"
-	"github.com/wasanx25/sreq/src"
+	"github.com/wasanx25/sreq/history"
 )
 
 // Content is structure that scraping content from Qiita
@@ -108,10 +108,10 @@ func openFile(body string, file string, cmdName ...string) {
 }
 
 func writeHistory(content *config.Qiita, argument string) {
-	var snippets src.Snippets
+	var snippets history.Snippets
 	snippets.Load()
 	url := content.URL
-	newSnippet := src.Snippet{
+	newSnippet := history.Snippet{
 		SearchKeyword: argument,
 		URL:           url,
 		Title:         content.Title,
