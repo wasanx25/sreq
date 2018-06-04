@@ -1,4 +1,4 @@
-package src
+package search
 
 import (
 	"fmt"

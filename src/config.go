@@ -8,12 +8,12 @@ type Qiita struct {
 	URL      string `json:"url"`
 }
 
-// getPageURL is that get scraping page url
-func getPageURL(keywords string, sort string, pagenation string) string {
+// GetPageURL is that get scraping page url
+func GetPageURL(keywords string, sort string, pagenation string) string {
 	return "https://qiita.com/search?page=" + pagenation + "&q=" + keywords + "&sort=" + sort
 }
 
-// getAPIURL is that get api url
-func getAPIURL(id string) string {
+// GetAPIURL is that get api url
+func GetAPIURL(id string) string {
 	return "https://qiita.com/api/v2/items/" + id
 }

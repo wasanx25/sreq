@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/wasanx25/sreq/src"
+	"github.com/wasanx25/sreq/search"
 )
 
 var (
@@ -20,7 +20,7 @@ var searchCmd = &cobra.Command{
 	Aliases: []string{"s"},
 	Short:   "Search on Qiita (short-cut alias: \"s\")",
 	Run: func(cmd *cobra.Command, args []string) {
-		searcher := &src.Searcher{
+		searcher := &search.Searcher{
 			Keywords:   strings.Join(args, ","),
 			Pagination: 1,
 			Sort:       sort,
