@@ -11,6 +11,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/fatih/color"
+	"github.com/wasanx25/sreq/config"
 	"github.com/wasanx25/sreq/src"
 )
 
@@ -22,7 +23,7 @@ type Content struct {
 }
 
 func search(argument string, pagenation int, sort string) ([]*Content, error) {
-	doc, err := goquery.NewDocument(src.GetPageURL(argument, sort, strconv.Itoa(pagenation)))
+	doc, err := goquery.NewDocument(config.GetPageURL(argument, sort, strconv.Itoa(pagenation)))
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +73,7 @@ func scan(contents []*Content, argument string, lynx bool) bool {
 	index, _ := strconv.Atoi(num)
 	target := contents[index]
 
-	resp, err := http.Get(src.GetAPIURL(target.ID))
+	resp, err := http.Get(config.GetAPIURL(target.ID))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -82,7 +83,7 @@ func scan(contents []*Content, argument string, lynx bool) bool {
 	if err != nil {
 		fmt.Println(err)
 	}
-	var qiita *src.Qiita
+	var qiita *config.Qiita
 	json.Unmarshal(b, &qiita)
 
 	writeHistory(qiita, argument)
@@ -106,7 +107,7 @@ func openFile(body string, file string, cmdName ...string) {
 	cmd.Run()
 }
 
-func writeHistory(content *src.Qiita, argument string) {
+func writeHistory(content *config.Qiita, argument string) {
 	var snippets src.Snippets
 	snippets.Load()
 	url := content.URL
