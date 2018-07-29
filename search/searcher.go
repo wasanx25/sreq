@@ -31,30 +31,16 @@ func (s *Searcher) Exec() {
 
 // Validate is that checking options
 func (s Searcher) Validate() (err error) {
-	if !s.checkSort() {
-		err = fmt.Errorf("%s is unknown value", s.Sort)
+	if len(s.Keywords) < 1 {
+		err = fmt.Errorf("Failed to not argument of search keyword")
 		return
 	}
 
-	if !s.checkKeywords() {
-		err = fmt.Errorf("failed to not argument of search keyword")
-		return
-	}
-	return
-}
-
-func (s Searcher) checkKeywords() bool {
-	if len(s.Keywords) > 0 {
-		return true
-	}
-	return false
-}
-
-func (s Searcher) checkSort() bool {
 	switch s.Sort {
 	case "rel", "created", "stock":
-		return true
+		return
 	default:
-		return false
+		err = fmt.Errorf("%s is unknown value", s.Sort)
+		return
 	}
 }
