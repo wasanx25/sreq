@@ -32,7 +32,7 @@ func (s *Searcher) Exec() {
 // Validate is that checking options
 func (s Searcher) Validate() (err error) {
 	if len(s.Keywords) < 1 {
-		err = fmt.Errorf("failed to not argument of search keyword")
+		err = fmt.Errorf("Failed to not argument of search keyword")
 		return
 	}
 
