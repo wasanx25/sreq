@@ -17,6 +17,16 @@ func TestNew(t *testing.T) {
 	}
 }
 
+func TestGetURL(t *testing.T) {
+	s := search.New("testK", "testS")
+	expectedURL := "https://qiita.com/search?pagenation=0&q=testK&sort=testS"
+	actual := s.GetURL()
+
+	if actual != expectedURL {
+		t.Errorf("expected=%q, got=%q", expectedURL, actual)
+	}
+}
+
 func TestExec(t *testing.T) {
 	s := search.New("testK", "testS")
 	t.Run("return content", func(t *testing.T) {
