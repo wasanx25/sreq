@@ -27,6 +27,15 @@ func TestGetURL(t *testing.T) {
 	}
 }
 
+func TestNextPage(t *testing.T) {
+	s := search.New("testK", "testS")
+	s.NextPage()
+
+	if s.Pagenation != 1 {
+		t.Errorf("expected=%q, got=%q", 1, s.Pagenation)
+	}
+}
+
 func TestExec(t *testing.T) {
 	s := search.New("testK", "testS")
 	t.Run("return content", func(t *testing.T) {
