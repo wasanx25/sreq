@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/wasanx25/sreq/config"
 )
 
 type search struct {
@@ -49,9 +48,8 @@ func (s *search) NextPage() {
 	s.Pagenation++
 }
 
-func (s *search) Exec() ([]*Content, error) {
-	url := config.GetPageURL(s.Keyword, s.Sort, strconv.Itoa(s.Pagenation))
-	doc, err := goquery.NewDocument(url)
+func (s *search) Exec(page string) ([]*Content, error) {
+	doc, err := goquery.NewDocument(page)
 	if err != nil {
 		return nil, err
 	}

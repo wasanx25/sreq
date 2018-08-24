@@ -39,12 +39,14 @@ func TestNextPage(t *testing.T) {
 func TestExec(t *testing.T) {
 	s := search.New("testK", "testS")
 	t.Run("return content", func(t *testing.T) {
-		actualC, actualE := s.Exec()
-		expectedContents := []*search.Content{}
-		var expectedError *error
+		actualC, actualE := s.Exec("https://qiita.com")
+		var expectedContents []*search.Content
+		var expectedError error
 
-		if actualC != expectedContents {
-			t.Errorf("expected=%q, got=%q", expectedContents, actualC)
+		for i, content := range actualC {
+			if content != expectedContents[i] {
+				t.Errorf("expected=%q, got=%q", expectedContents[i], content)
+			}
 		}
 
 		if actualE != expectedError {
