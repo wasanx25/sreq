@@ -33,3 +33,7 @@ func (s *search) GetURL() string {
 
 	return u.String()
 }
+
+func (s *search) NextPage() {
+	s.Pagenation++
+}
