@@ -19,7 +19,7 @@ func TestNew(t *testing.T) {
 
 func TestGetURL(t *testing.T) {
 	s := search.New("testK", "testS")
-	expectedURL := "https://qiita.com/search?pagenation=0&q=testK&sort=testS"
+	expectedURL := "https://qiita.com/search?page=0&q=testK&sort=testS"
 	actual := s.GetURL()
 
 	if actual != expectedURL {

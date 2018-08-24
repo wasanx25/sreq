@@ -32,7 +32,7 @@ func New(keyword string, sort string) *search {
 
 func (s *search) GetURL() string {
 	q := url.Values{}
-	q.Set("pagenetion", strconv.Itoa(s.Pagenation))
+	q.Set("page", strconv.Itoa(s.Pagenation))
 	q.Set("q", s.Keyword)
 	q.Set("sort", s.Sort)
 	u := url.URL{
