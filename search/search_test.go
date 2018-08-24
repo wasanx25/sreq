@@ -39,6 +39,7 @@ func TestNextPage(t *testing.T) {
 func TestExec(t *testing.T) {
 	s := search.New("testK", "testS")
 	t.Run("return content", func(t *testing.T) {
+		// TODO: use dummy URL that running TCP
 		actualC, actualE := s.Exec("https://qiita.com")
 		var expectedContents []*search.Content
 		var expectedError error
