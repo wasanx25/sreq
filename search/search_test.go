@@ -1,6 +1,7 @@
 package search_test
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/wasanx25/sreq/search"
@@ -54,4 +55,84 @@ func TestExec(t *testing.T) {
 			t.Errorf("expected=%q, got=%q", expectedError, actualE)
 		}
 	})
+}
+
+func TestContentString(t *testing.T) {
+	tests := []struct {
+		contentCount int
+		expected     string
+	}{
+		{
+			2,
+			`0 -> title_1
+desc_1
+
+1 -> title_2
+desc_2
+
+`,
+		},
+		{
+			10,
+			`0 -> title_1
+desc_1
+
+1 -> title_2
+desc_2
+
+2 -> title_3
+desc_3
+
+3 -> title_4
+desc_4
+
+4 -> title_5
+desc_5
+
+5 -> title_6
+desc_6
+
+6 -> title_7
+desc_7
+
+7 -> title_8
+desc_8
+
+8 -> title_9
+desc_9
+
+9 -> title_10
+desc_10
+
+n -> next page
+`,
+		},
+	}
+
+	s := search.New("testK", "testS")
+
+	for _, tt := range tests {
+		num := 1
+		for {
+			id := strconv.Itoa(num)
+			title := "title_" + id
+			desc := "desc_" + id
+			s.Contents = append(
+				s.Contents,
+				&search.Content{ID: id, Title: title, Desc: desc},
+			)
+			if num == tt.contentCount {
+				break
+			}
+			num++
+		}
+
+		actual := s.ContentString()
+
+		if actual != tt.expected {
+			t.Errorf("expected=%q, got=%q", tt.expected, actual)
+		}
+
+		s.Contents = nil
+	}
 }

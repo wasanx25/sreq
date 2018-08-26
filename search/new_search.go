@@ -1,10 +1,12 @@
 package search
 
 import (
+	"bytes"
 	"net/url"
 	"strconv"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/fatih/color"
 )
 
 type search struct {
@@ -56,6 +58,22 @@ func (s *search) Exec(page string) ([]*Content, error) {
 	doc.Find(".searchResult").Each(s.getAttr)
 
 	return s.Contents, nil
+}
+
+func (s *search) ContentString() string {
+	var out bytes.Buffer
+
+	for n, c := range s.Contents {
+		out.WriteString(color.YellowString(strconv.Itoa(n) + " -> "))
+		out.WriteString(c.Title + "\n")
+		out.WriteString(color.GreenString(c.Desc) + "\n\n")
+	}
+
+	if len(s.Contents) == 10 {
+		out.WriteString(color.YellowString("n -> ") + "next page\n")
+	}
+
+	return out.String()
 }
 
 func (s *search) getAttr(_ int, q *goquery.Selection) {
