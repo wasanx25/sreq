@@ -39,22 +39,20 @@ func TestNextPage(t *testing.T) {
 
 func TestExec(t *testing.T) {
 	s := search.New("testK", "testS")
-	t.Run("return content", func(t *testing.T) {
-		// TODO: use dummy URL that running TCP
-		actualC, actualE := s.Exec("https://qiita.com")
-		var expectedContents []*search.Content
-		var expectedError error
+	// TODO: use dummy URL that running TCP
+	actualC, actualE := s.Exec("https://qiita.com")
+	var expectedContents []*search.Content
+	var expectedError error
 
-		for i, content := range actualC {
-			if content != expectedContents[i] {
-				t.Errorf("expected=%q, got=%q", expectedContents[i], content)
-			}
+	for i, content := range actualC {
+		if content != expectedContents[i] {
+			t.Errorf("expected=%q, got=%q", expectedContents[i], content)
 		}
+	}
 
-		if actualE != expectedError {
-			t.Errorf("expected=%q, got=%q", expectedError, actualE)
-		}
-	})
+	if actualE != expectedError {
+		t.Errorf("expected=%q, got=%q", expectedError, actualE)
+	}
 }
 
 func TestContentString(t *testing.T) {
