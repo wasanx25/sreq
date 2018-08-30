@@ -3,41 +3,66 @@ package history
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/BurntSushi/toml"
 )
 
-// Snippets array of Snippet
-type Snippets struct {
-	Snippets []Snippet `toml:"snippets"`
+type History struct {
+	File     string
+	Snippets *snippets
 }
 
-// Snippet for search of qiita
-type Snippet struct {
+func New(file string) *History {
+	s := &snippets{}
+	return &History{
+		File:     file,
+		Snippets: s,
+	}
+}
+
+func (h *History) Write(keyword, url, title string) (err error) {
+	err = h.Snippets.load(h.File)
+	if err != nil {
+		return err
+	}
+
+	s := snippet{
+		SearchKeyword: keyword,
+		URL:           url,
+		Title:         title,
+	}
+
+	h.Snippets.Snippets = append(h.Snippets.Snippets, s)
+	err = h.Snippets.save(h.File)
+	if err != nil {
+		return err
+	}
+
+	return
+}
+
+type snippets struct {
+	Snippets []snippet `toml:"snippets"`
+}
+
+type snippet struct {
 	SearchKeyword string `toml:"search_keyword"`
 	URL           string `toml:"url"`
 	Title         string `toml:"title"`
 }
 
-// Load reading snippet file
-func (snippets *Snippets) Load() error {
-	if _, err := toml.DecodeFile(getHistoryFile(), snippets); err != nil {
+func (snippets *snippets) load(file string) error {
+	if _, err := toml.DecodeFile(file, snippets); err != nil {
 		return fmt.Errorf("Failed to load snippet file. %v", err)
 	}
 	return nil
 }
 
-// Save snippet file
-func (snippets *Snippets) Save() error {
-	f, err := os.Create(getHistoryFile())
+func (snippets *snippets) save(file string) error {
+	f, err := os.Create(file)
 	defer f.Close()
 	if err != nil {
 		return fmt.Errorf("Failed to save snippet file. err: %s", err)
 	}
 	return toml.NewEncoder(f).Encode(snippets)
-}
-
-func getHistoryFile() string {
-	return filepath.Join(os.Getenv("HOME"), ".config", "sreq", "sreq-history.toml")
 }
