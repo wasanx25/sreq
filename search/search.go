@@ -50,14 +50,14 @@ func (s *Search) NextPage() {
 	s.Pagenation++
 }
 
-func (s *Search) Exec(page string) ([]*Content, error) {
+func (s *Search) Exec(page string) error {
 	doc, err := goquery.NewDocument(page)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	doc.Find(".searchResult").Each(s.getAttr)
 
-	return s.Contents, nil
+	return nil
 }
 
 func (s *Search) ContentString() string {
