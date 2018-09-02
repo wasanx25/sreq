@@ -20,6 +20,11 @@ func New(file string) *History {
 	}
 }
 
+func (h *History) Read() (err error) {
+	err = h.Snippets.load(h.File)
+	return
+}
+
 func (h *History) Write(keyword, url, title string) (err error) {
 	err = h.Snippets.load(h.File)
 	if err != nil {

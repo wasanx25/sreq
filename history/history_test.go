@@ -7,6 +7,21 @@ import (
 	"github.com/wasanx25/sreq/history"
 )
 
+func TestRead(t *testing.T) {
+	f, err := os.Create("./test.toml")
+	if err != nil {
+		t.Error(err)
+	}
+	defer f.Close()
+	defer os.Remove("./test.toml")
+
+	h := history.New("./test.toml")
+	err = h.Read()
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestWrite(t *testing.T) {
 	f, err := os.Create("./test.toml")
 	if err != nil {
