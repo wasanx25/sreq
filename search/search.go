@@ -9,7 +9,7 @@ import (
 	"github.com/fatih/color"
 )
 
-type search struct {
+type Search struct {
 	Keyword    string
 	Pagenation int
 	Sort       string
@@ -23,15 +23,15 @@ type Content struct {
 	Desc  string
 }
 
-func New(keyword string, sort string) *search {
-	return &search{
+func New(keyword string, sort string) *Search {
+	return &Search{
 		Keyword:    keyword,
 		Pagenation: 0,
 		Sort:       sort,
 	}
 }
 
-func (s *search) GetURL() string {
+func (s *Search) GetURL() string {
 	q := url.Values{}
 	q.Set("page", strconv.Itoa(s.Pagenation))
 	q.Set("q", s.Keyword)
@@ -46,11 +46,11 @@ func (s *search) GetURL() string {
 	return u.String()
 }
 
-func (s *search) NextPage() {
+func (s *Search) NextPage() {
 	s.Pagenation++
 }
 
-func (s *search) Exec(page string) ([]*Content, error) {
+func (s *Search) Exec(page string) ([]*Content, error) {
 	doc, err := goquery.NewDocument(page)
 	if err != nil {
 		return nil, err
@@ -60,7 +60,7 @@ func (s *search) Exec(page string) ([]*Content, error) {
 	return s.Contents, nil
 }
 
-func (s *search) ContentString() string {
+func (s *Search) ContentString() string {
 	var out bytes.Buffer
 
 	for n, c := range s.Contents {
@@ -76,7 +76,7 @@ func (s *search) ContentString() string {
 	return out.String()
 }
 
-func (s *search) getAttr(_ int, q *goquery.Selection) {
+func (s *Search) getAttr(_ int, q *goquery.Selection) {
 	itemID, _ := q.Attr("data-uuid")
 	title := q.Find(".searchResult_itemTitle a").Text()
 	desc := q.Find(".searchResult_snippet").Text()
