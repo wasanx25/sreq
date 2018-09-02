@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -13,10 +15,10 @@ var keywordsCmd = &cobra.Command{
 	Aliases: []string{"k"},
 	Short:   "Show Keywords History (short-cut alias: \"k\")",
 	Run: func(cmd *cobra.Command, args []string) {
-		var snippets history.Snippets
-		snippets.Load()
-		for _, snip := range snippets.Snippets {
-			fmt.Println(color.CyanString("keyword: " + snip.SearchKeyword))
+		file := filepath.Join(os.Getenv("HOME"), ".config", "sreq", "sreq-history.toml")
+		h := history.New(file)
+		for _, snippet := range h.Snippets.Snippets {
+			fmt.Println(color.CyanString("keyword: " + snippet.SearchKeyword))
 		}
 	},
 }
