@@ -18,7 +18,7 @@ func TestExec(t *testing.T) {
 	}
 	defer os.Remove("./test")
 
-	v := view.New(view.LESS, "./test")
+	v := view.New(view.LESS, "./test", nil)
 
 	out := captureStdout(func() {
 		v.Exec()

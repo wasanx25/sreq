@@ -18,7 +18,7 @@ const (
 	LYNX = "lynx"
 )
 
-func New(cmd Command, file string, option ...string) *View {
+func New(cmd Command, file string, option []string) *View {
 	return &View{
 		Cmd:    cmd,
 		File:   file,
