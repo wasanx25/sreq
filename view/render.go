@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 type Render struct {
@@ -43,5 +44,10 @@ func (r *Render) Parse() (item *Item, err error) {
 	}
 
 	json.Unmarshal(b, &item)
+	return
+}
+
+func (r *Render) Write(file, body string) (err error) {
+	err = ioutil.WriteFile(file, []byte(body), os.ModePerm)
 	return
 }
