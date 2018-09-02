@@ -9,6 +9,10 @@ import (
 	"github.com/fatih/color"
 )
 
+/*
+Search struct is elements of search.
+It has search results in Contents.
+*/
 type Search struct {
 	Keyword    string
 	Pagenation int
@@ -16,13 +20,17 @@ type Search struct {
 	Contents   []*Content
 }
 
-// Content is structure that scraping content from Qiita
+// Content is structure that scraping content from page.
 type Content struct {
 	ID    string
 	Title string
 	Desc  string
 }
 
+/*
+New is Search initializer.
+Keyword string, for example "go,scraping,context"
+*/
 func New(keyword string, sort string) *Search {
 	return &Search{
 		Keyword:    keyword,
@@ -31,6 +39,7 @@ func New(keyword string, sort string) *Search {
 	}
 }
 
+// GetURL get qiita page URL for scraping.
 func (s *Search) GetURL() string {
 	q := url.Values{}
 	q.Set("page", strconv.Itoa(s.Pagenation))
@@ -46,10 +55,12 @@ func (s *Search) GetURL() string {
 	return u.String()
 }
 
+// NextPage literary mean this word.
 func (s *Search) NextPage() {
 	s.Pagenation++
 }
 
+// Exec scraping and set contents.
 func (s *Search) Exec(page string) error {
 	doc, err := goquery.NewDocument(page)
 	if err != nil {
@@ -60,6 +71,7 @@ func (s *Search) Exec(page string) error {
 	return nil
 }
 
+// ContentString numbering content index for selecting.
 func (s *Search) ContentString() string {
 	var out bytes.Buffer
 

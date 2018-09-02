@@ -5,8 +5,10 @@ import (
 	"os/exec"
 )
 
+// Command is in const string
 type Command string
 
+// View has commands string.
 type View struct {
 	Cmd    Command
 	Option []string
@@ -14,10 +16,16 @@ type View struct {
 }
 
 const (
+	// LESS command
 	LESS = "less"
+	// LYNX command
 	LYNX = "lynx"
 )
 
+/*
+New is View initializer.
+Commands of executing.
+*/
 func New(cmd Command, file string, option []string) *View {
 	return &View{
 		Cmd:    cmd,
@@ -26,6 +34,10 @@ func New(cmd Command, file string, option []string) *View {
 	}
 }
 
+/*
+Exec execute standard input and output.
+Use View Command for viewing result content.
+*/
 func (v *View) Exec() {
 	var args []string
 	args = append(v.Option, v.File)

@@ -12,6 +12,10 @@ import (
 	"github.com/wasanx25/sreq/view"
 )
 
+/*
+Control has search option and history and viewing.
+User control on CLI.
+*/
 type Control struct {
 	Num     int
 	Next    bool
@@ -21,6 +25,10 @@ type Control struct {
 	View    *view.View
 }
 
+/*
+New creates Control structure.
+Set history and result filename.
+*/
 func New(keyword, sort string, lynx bool) *Control {
 	hFile := filepath.Join(os.Getenv("HOME"), ".config", "sreq", "sreq-history.toml")
 
@@ -50,6 +58,7 @@ func New(keyword, sort string, lynx bool) *Control {
 	}
 }
 
+// Exec is main method in search command.
 func (c *Control) Exec() (err error) {
 loop:
 	for {
@@ -98,6 +107,7 @@ loop:
 	return
 }
 
+// Scan execute fmt.Scanf and get content index.
 func (c *Control) Scan() (err error) {
 	var num string
 	if _, err = fmt.Scanf("%s", &num); err != nil {
@@ -116,6 +126,7 @@ func (c *Control) Scan() (err error) {
 	return
 }
 
+// GetURL get item API URL.
 func (c *Control) GetURL(id string) string {
 	u := url.URL{
 		Scheme: "https",

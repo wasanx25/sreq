@@ -7,11 +7,21 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+/*
+History is search result history that using snippet file,
+snippet file is toml.
+
+See snippets struct what writing toml.
+*/
 type History struct {
 	File     string
 	Snippets *snippets
 }
 
+/*
+New is History initializer.
+TODO: File is base on $(HOME) but do not support Windows.
+*/
 func New(file string) *History {
 	s := &snippets{}
 	return &History{

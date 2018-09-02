@@ -8,11 +8,16 @@ import (
 	"os"
 )
 
+// Render has API URL and API body.
 type Render struct {
 	URL    string
 	Reader io.Reader
 }
 
+/*
+Item is base on parsing Qiita API JSON.
+DOCS: https://qiita.com/api/v2/docs#get-apiv2itemsitem_id
+*/
 type Item struct {
 	HTML     string `json:"rendered_body"`
 	Markdown string `json:"body"`
@@ -20,12 +25,17 @@ type Item struct {
 	URL      string `json:"url"`
 }
 
+/*
+NewRender creates Render.
+URL is Qiita item API URL for getting content.
+*/
 func NewRender(url string) *Render {
 	return &Render{
 		URL: url,
 	}
 }
 
+// GetPage set response body.
 func (r *Render) GetPage() error {
 	res, err := http.Get(r.URL)
 	if err != nil {
@@ -37,6 +47,7 @@ func (r *Render) GetPage() error {
 	return nil
 }
 
+// Parse parses Qiita JSON.
 func (r *Render) Parse() (item *Item, err error) {
 	b, err := ioutil.ReadAll(r.Reader)
 	if err != nil {
