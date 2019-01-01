@@ -10,6 +10,7 @@ import (
 	"github.com/wasanx25/sreq/history"
 	"github.com/wasanx25/sreq/search"
 	"github.com/wasanx25/sreq/view"
+	"github.com/wasanx25/goss"
 )
 
 /*
@@ -29,7 +30,7 @@ type Control struct {
 New creates Control structure.
 Set history and result filename.
 */
-func New(keyword, sort string, lynx bool) *Control {
+func New(keyword, sort string) *Control {
 	hFile := filepath.Join(os.Getenv("HOME"), ".config", "sreq", "sreq-history.toml")
 
 	var (
@@ -37,15 +38,6 @@ func New(keyword, sort string, lynx bool) *Control {
 		file    string
 		options []string
 	)
-
-	if lynx {
-		cmd = view.LYNX
-		file = "/tmp/sreq.html"
-		options = []string{"-display_charset=utf-8", "-assume_charset=utf-8"}
-	} else {
-		cmd = view.LESS
-		file = "/tmp/sreq.txt"
-	}
 
 	s := search.New(keyword, sort)
 	h := history.New(hFile)
@@ -86,17 +78,7 @@ loop:
 				break loop
 			}
 
-			var body string
-			if c.View.Cmd == view.LESS {
-				body = item.Markdown
-			} else {
-				body = item.HTML
-			}
-
-			err = c.Render.Write(c.View.File, body)
-			if err != nil {
-				break loop
-			}
+			goss.Run(item.Markdown)
 
 			c.History.Write(c.Search.Keyword, item.URL, item.Title)
 			c.View.Exec()

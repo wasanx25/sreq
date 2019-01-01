@@ -20,7 +20,7 @@ var searchCmd = &cobra.Command{
 	Aliases: []string{"s"},
 	Short:   "Search on Qiita (short-cut alias: \"s\")",
 	Run: func(cmd *cobra.Command, args []string) {
-		c := control.New(strings.Join(args, ","), sort, lynx)
+		c := control.New(strings.Join(args, ","), sort)
 		err := c.Exec()
 		if err != nil {
 			fmt.Println(err)
@@ -32,5 +32,4 @@ var searchCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(searchCmd)
 	searchCmd.Flags().StringVar(&sort, "sort", "rel", "Select rel or created or stock for sort")
-	searchCmd.Flags().BoolVar(&lynx, "lynx", false, "Use lynx CUI browse")
 }
