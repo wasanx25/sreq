@@ -1,13 +1,7 @@
-godep:
-		go get -u github.com/golang/dep/cmd/dep
+deps:
+		go mod vendor
 
-deps: godep
-		dep ensure
-
-update: godep
-		dep ensure -update
-
-install: main.go deps
+install: deps
 		go install
 
 lint:
