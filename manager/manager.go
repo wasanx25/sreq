@@ -1,7 +1,8 @@
 package manager
 
 import (
-	"fmt"
+	"github.com/wasanx25/goss"
+	"net/url"
 	"os"
 	"path/filepath"
 
@@ -67,8 +68,42 @@ again:
 		return
 	}
 
+	var content *search.Content
 	switch answer.Content {
 	case "next":
 		goto again
+	default:
+		for _, c := range contents {
+			if answer.Content == c.Title {
+				content = c
+				break
+			}
+		}
 	}
+
+	u := url.URL{
+		Scheme: "https",
+		Host:   "qiita.com",
+		Path:   filepath.Join("api", "v2", "items", content.ID),
+	}
+
+	m.render = view.NewRender(u.String())
+	err = m.render.GetPage()
+	if err != nil {
+		return
+	}
+
+	item, err := m.render.Parse()
+	if err != nil {
+		return
+	}
+
+	err = goss.Run(item.Markdown)
+	if err != nil {
+		return
+	}
+
+	m.history.Write(m.search.Keyword, item.URL, item.Title)
+
+	return
 }
