@@ -19,7 +19,6 @@ Item is base on parsing Qiita API JSON.
 DOCS: https://qiita.com/api/v2/docs#get-apiv2itemsitem_id
 */
 type Item struct {
-	HTML     string `json:"rendered_body"`
 	Markdown string `json:"body"`
 	Title    string `json:"title"`
 	URL      string `json:"url"`
