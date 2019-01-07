@@ -38,9 +38,9 @@ func NewRender(url string) *Render {
 func (r *Render) GetPage() error {
 	res, err := http.Get(r.URL)
 	if err != nil {
+		res.Body.Close()
 		return err
 	}
-	defer res.Body.Close()
 
 	r.Reader = res.Body
 	return nil
