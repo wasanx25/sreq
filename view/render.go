@@ -50,10 +50,10 @@ func (r *Render) GetPage() error {
 func (r *Render) Parse() (item *Item, err error) {
 	b, err := ioutil.ReadAll(r.Reader)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	json.Unmarshal(b, &item)
+	err = json.Unmarshal(b, &item)
 	return
 }
 
