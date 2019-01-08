@@ -10,11 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	editor string
-	lynx   bool
-	sort   string
-)
+var sort string
 
 var searchCmd = &cobra.Command{
 	Use:     "search",
