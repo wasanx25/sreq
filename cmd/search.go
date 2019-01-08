@@ -5,8 +5,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/wasanx25/sreq/manager"
+
 	"github.com/spf13/cobra"
-	"github.com/wasanx25/sreq/control"
 )
 
 var (
@@ -20,8 +21,8 @@ var searchCmd = &cobra.Command{
 	Aliases: []string{"s"},
 	Short:   "Search on Qiita (short-cut alias: \"s\")",
 	Run: func(cmd *cobra.Command, args []string) {
-		c := control.New(strings.Join(args, ","), sort)
-		err := c.Exec()
+		m := manager.New(strings.Join(args, ","), sort)
+		err := m.Run()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
