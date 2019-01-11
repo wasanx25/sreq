@@ -1,24 +1,24 @@
 package manager
 
 import (
-	"github.com/wasanx25/goss"
-	"github.com/wasanx25/sreq/fetcher"
-	"github.com/wasanx25/sreq/pager"
-	"github.com/wasanx25/sreq/parser"
 	"net/url"
 	"os"
 	"path/filepath"
 
 	"github.com/wasanx25/sreq/history"
 	"github.com/wasanx25/sreq/view"
+	"github.com/wasanx25/sreq/fetcher"
+	"github.com/wasanx25/sreq/pager"
+	"github.com/wasanx25/sreq/parser"
 
 	"github.com/AlecAivazis/survey"
+	"github.com/wasanx25/goss"
 )
 
 type Manager struct {
 	history *history.History
-	render *view.Render
-	pager pager.Pager
+	render  *view.Render
+	pager   pager.Pager
 }
 
 func New(keyword, sort string) *Manager {
@@ -30,7 +30,7 @@ func New(keyword, sort string) *Manager {
 
 	return &Manager{
 		history: h,
-		pager: p,
+		pager:   p,
 	}
 }
 
@@ -78,7 +78,7 @@ loop:
 	return err
 }
 
-func (m *Manager) viewSelector(contentsStr []string) (string, error){
+func (m *Manager) viewSelector(contentsStr []string) (string, error) {
 	contentsStr = append(contentsStr, "next")
 
 	contQs := []*survey.Question{
@@ -117,4 +117,3 @@ func (m *Manager) getContent(answer string, contents []fetcher.Content) fetcher.
 
 	return content
 }
-

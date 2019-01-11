@@ -22,8 +22,8 @@ type Pager interface {
 
 type pager struct {
 	keyword string
-	paging int
-	sort SortType
+	paging  int
+	sort    SortType
 }
 
 func New(keyword, sort string) (Pager, error) {
@@ -35,8 +35,8 @@ func New(keyword, sort string) (Pager, error) {
 
 	return &pager{
 		keyword: keyword,
-		paging: 0,
-		sort: s,
+		paging:  0,
+		sort:    s,
 	}, nil
 }
 

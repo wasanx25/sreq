@@ -16,15 +16,15 @@ func TestParse(t *testing.T) {
 		Get("/test").
 		Reply(200).
 		JSON(map[string]string{
-			"body": "test body (markdown)",
+			"body":  "test body (markdown)",
 			"title": "test title",
-			"url": "http://test.url",
+			"url":   "http://test.url",
 		})
 
 	u := url.URL{
 		Scheme: "https",
-		Host: "test.com",
-		Path: "test",
+		Host:   "test.com",
+		Path:   "test",
 	}
 
 	item, err := parser.Parse(u)

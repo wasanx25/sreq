@@ -1,8 +1,9 @@
 package fetcher_test
 
 import (
-	"github.com/wasanx25/sreq/fetcher"
 	"testing"
+
+	"github.com/wasanx25/sreq/fetcher"
 
 	"gopkg.in/h2non/gock.v1"
 )

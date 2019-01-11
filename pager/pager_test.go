@@ -1,15 +1,16 @@
 package pager_test
 
 import (
-	"github.com/wasanx25/sreq/pager"
 	"testing"
+
+	"github.com/wasanx25/sreq/pager"
 )
 
 func TestValid(t *testing.T) {
 	tests := []struct {
-		input string
+		input    string
 		expected bool
-	} {
+	}{
 		{"rel", true},
 		{"created", true},
 		{"stock", true},
