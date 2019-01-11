@@ -1,7 +1,7 @@
-package fetch_test
+package fetcher_test
 
 import (
-	"github.com/wasanx25/sreq/fetch"
+	"github.com/wasanx25/sreq/fetcher"
 	"testing"
 
 	"gopkg.in/h2non/gock.v1"
@@ -15,7 +15,7 @@ func TestFetch(t *testing.T) {
 		Reply(200).
 		File("testdata/sample.html")
 
-	contents, err := fetch.Fetch("https://test.com/test")
+	contents, err := fetcher.Fetch("https://test.com/test")
 	if err != nil {
 		t.Fatal(err)
 	}
