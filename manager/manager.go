@@ -2,12 +2,14 @@ package manager
 
 import (
 	"github.com/wasanx25/goss"
+	"github.com/wasanx25/sreq/fetcher"
+	"github.com/wasanx25/sreq/pager"
+	"github.com/wasanx25/sreq/parser"
 	"net/url"
 	"os"
 	"path/filepath"
 
 	"github.com/wasanx25/sreq/history"
-	"github.com/wasanx25/sreq/search"
 	"github.com/wasanx25/sreq/view"
 
 	"github.com/AlecAivazis/survey"
@@ -16,35 +18,67 @@ import (
 type Manager struct {
 	history *history.History
 	render *view.Render
-	search *search.Search
+	pager pager.Pager
 }
 
 func New(keyword, sort string) *Manager {
 	historyFile := filepath.Join(os.Getenv("HOME"), ".config", "sreq", "sreq-history.toml")
 
-	s := search.New(keyword, sort)
 	h := history.New(historyFile)
+	// TODO
+	p, _ := pager.New(keyword, sort)
 
 	return &Manager{
 		history: h,
-		search: s,
+		pager: p,
 	}
 }
 
-func (m *Manager) Run() (err error) {
-again:
-	page := m.search.GetURL()
-	err = m.search.Exec(page)
+func (m *Manager) Run() error {
+	var content fetcher.Content
+
+loop:
+	for {
+		contents, err := fetcher.Fetch(m.pager.GetURL())
+		if err != nil {
+			return err
+		}
+
+		var contentsStr []string
+
+		for _, c := range contents {
+			contentsStr = append(contentsStr, c.GetTitle())
+		}
+
+		answer, err := m.viewSelector(contentsStr)
+		content = m.getContent(answer, contents)
+
+		if content != nil {
+			break loop
+		}
+
+		m.pager.NextPage()
+	}
+
+	u := url.URL{
+		Scheme: "https",
+		Host:   "qiita.com",
+		Path:   filepath.Join("api", "v2", "items", content.GetID()),
+	}
+	item, err := parser.Parse(u)
+
 	if err != nil {
-		return
+		return err
 	}
 
-	contents := m.search.Contents
-	var contentsStr []string
+	m.history.Write("keyword", item.URL, item.Title)
 
-	for _, c := range contents {
-		contentsStr = append(contentsStr, c.Title)
-	}
+	err = goss.Run(item.Markdown)
+
+	return err
+}
+
+func (m *Manager) viewSelector(contentsStr []string) (string, error){
 	contentsStr = append(contentsStr, "next")
 
 	contQs := []*survey.Question{
@@ -61,49 +95,26 @@ again:
 	answer := struct {
 		Content string
 	}{}
+	err := survey.Ask(contQs, &answer)
 
-	err = survey.Ask(contQs, &answer)
+	return answer.Content, err
+}
 
-	if err != nil {
-		return
-	}
+func (m *Manager) getContent(answer string, contents []fetcher.Content) fetcher.Content {
+	var content fetcher.Content
 
-	var content *search.Content
-	switch answer.Content {
+	switch answer {
 	case "next":
-		goto again
+		return nil
 	default:
 		for _, c := range contents {
-			if answer.Content == c.Title {
+			if answer == c.GetTitle() {
 				content = c
 				break
 			}
 		}
 	}
 
-	u := url.URL{
-		Scheme: "https",
-		Host:   "qiita.com",
-		Path:   filepath.Join("api", "v2", "items", content.ID),
-	}
-
-	m.render = view.NewRender(u.String())
-	err = m.render.GetPage()
-	if err != nil {
-		return
-	}
-
-	item, err := m.render.Parse()
-	if err != nil {
-		return
-	}
-
-	err = goss.Run(item.Markdown)
-	if err != nil {
-		return
-	}
-
-	m.history.Write(m.search.Keyword, item.URL, item.Title)
-
-	return
+	return content
 }
+
