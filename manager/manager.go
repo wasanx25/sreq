@@ -19,17 +19,19 @@ type Manager struct {
 	pager   pager.Pager
 }
 
-func New(keyword, sort string) *Manager {
+func New(keyword, sort string) (*Manager, error) {
 	historyFile := filepath.Join(os.Getenv("HOME"), ".config", "sreq", "sreq-history.toml")
 
 	h := history.New(historyFile)
-	// TODO
-	p, _ := pager.New(keyword, sort)
+	p, err := pager.New(keyword, sort)
+	if err != nil {
+		return nil, err
+	}
 
 	return &Manager{
 		history: h,
 		pager:   p,
-	}
+	}, nil
 }
 
 func (m *Manager) Run() error {
@@ -69,7 +71,10 @@ loop:
 		return err
 	}
 
-	m.history.Write("keyword", item.URL, item.Title)
+	err = m.history.Write("keyword", item.URL, item.Title)
+	if err != nil {
+		return err
+	}
 
 	err = goss.Run(item.Markdown)
 

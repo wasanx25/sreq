@@ -17,8 +17,13 @@ var searchCmd = &cobra.Command{
 	Aliases: []string{"s"},
 	Short:   "Search on Qiita (short-cut alias: \"s\")",
 	Run: func(cmd *cobra.Command, args []string) {
-		m := manager.New(strings.Join(args, ","), sort)
-		err := m.Run()
+		m, err := manager.New(strings.Join(args, ","), sort)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		err = m.Run()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
