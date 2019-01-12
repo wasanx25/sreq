@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/wasanx25/sreq/history"
 	"github.com/wasanx25/sreq/fetcher"
+	"github.com/wasanx25/sreq/history"
 	"github.com/wasanx25/sreq/pager"
 	"github.com/wasanx25/sreq/parser"
 
