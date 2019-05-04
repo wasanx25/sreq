@@ -1,5 +1,5 @@
 ## Sreq
-Command-Line to Search on Qiita and view using `less` or `lynx`.
+Command-Line to Search on Qiita and view using [goss](https://github.com/wasanx25/goss)
 
 ## Installation
 Download binary from [here](https://github.com/wasanx25/sreq/releases/latest).
